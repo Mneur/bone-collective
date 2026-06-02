@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BONE COLLECTIVE</title>
+<style>
+  @font-face {
+    font-family: 'Luckiest Guy';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url('fonts/LuckiestGuy.ttf') format('truetype');
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body { font-family: 'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', sans-serif; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+
+  .magazine { width: 100vw; height: 100vh; position: relative; perspective: 2000px; perspective-origin: left center; }
+
+  /* ============================================ */
+  /* COVER PAGE                                    */
+  /* ============================================ */
+  .cover-page {
+    position: absolute; inset: 0; z-index: 10;
+    transform-origin: left center;
+    transition: transform 1.4s cubic-bezier(0.4,0,0.2,1);
+    transform-style: preserve-3d;
+    background: linear-gradient(175deg,#f7f0de 0%,#f2e8d2 38%,#ece0c6 100%);
+  }
+  .cover-page.open { transform: rotateY(-130deg); pointer-events: none; }
+  .cover-page .cover-inner { width: 100%; height: 100%; position: relative; overflow: hidden; }
+  .cover-page .cover-inner::after {
+    content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 1; opacity: 0.018;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.5' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 100px 100px;
+  }
+  .cover-page::after {
+    content: ''; position: absolute; top: 0; right: 0; bottom: 0; width: 60px;
+    background: linear-gradient(to right,rgba(0,0,0,0.03),rgba(0,0,0,0.12));
+    pointer-events: none; z-index: 11; transition: opacity 1s;
+  }
+
+  .vol {
+    position: absolute; top: 2.8rem; left: 3rem; z-index: 3;
+    font-family: 'PingFang SC','Microsoft YaHei',sans-serif; font-size: 0.72rem; font-weight: 500;
+    letter-spacing: 0.38em; color: rgba(0,0,0,0.28); text-transform: uppercase;
+  }
+  .tagline {
+    position: absolute; top: 2.8rem; right: 3rem; z-index: 3;
+    font-family: 'PingFang SC','Microsoft YaHei',sans-serif; font-size: 0.7rem; font-weight: 500;
+    letter-spacing: 0.3em; color: rgba(0,0,0,0.26); text-align: right; text-transform: uppercase;
+  }
+  .est { position: absolute; right: 3rem; top: 50%; transform: translateY(-50%); z-index: 3; text-align: right; }
+  .est .l1 {
+    font-family: 'PingFang SC','Microsoft YaHei',sans-serif; font-size: 0.85rem; font-weight: 600;
+    letter-spacing: 0.38em; color: rgba(0,0,0,0.22); text-transform: uppercase;
+  }
+  .est .l2 {
+    font-family: 'PingFang SC','Microsoft YaHei',sans-serif; font-size: 1.2rem; font-weight: 400;
+    color: rgba(0,0,0,0.3); line-height: 1.45;
+  }
+
+  .center {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+    z-index: 3; display: flex; flex-direction: column; align-items: center; text-align: center;
+  }
+  .center .bone-title {
+    font-family: 'Luckiest Guy','PingFang SC',sans-serif; font-size: clamp(5.5rem,13vw,9.5rem);
+    font-weight: 800; letter-spacing: -0.01em; line-height: 0.86; color: #000;
+    text-shadow: 2px 2px 0 rgba(175,65,65,0.2);
+    animation: in .85s cubic-bezier(.16,1,.3,1) both;
+  }
+  .center .bone-icon {
+    width: 200px; height: auto; margin-top: 0.8rem; margin-bottom: 0.45rem;
+    cursor: pointer; transition: transform .3s;
+    animation: in .85s .08s cubic-bezier(.16,1,.3,1) both;
+    position: relative; z-index: 20;
+  }
+  .center .bone-icon:hover { transform: scale(1.06); }
+  .center .bone-icon svg { width: 100%; height: auto; display: block; }
+  .center .bone-cn {
+    font-family: 'PingFang SC','Microsoft YaHei',sans-serif;
+    font-size: 1rem; font-weight: 500; letter-spacing: 0.5em; color: #444;
+    animation: in .85s .14s cubic-bezier(.16,1,.3,1) both;
+  }
+  @keyframes in {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .feat {
+    position: absolute; bottom: 2.8rem; left: 3rem; z-index: 3; max-width: 440px;
+    animation: in .85s .26s cubic-bezier(.16,1,.3,1) both;
+  }
+  .feat .fl {
+    font-family: 'PingFang SC','Microsoft YaHei',sans-serif; font-size: 0.72rem; font-weight: 700;
+    letter-spacing: 0.38em; text-transform: uppercase; color: #c43a2f; margin-bottom: 0.6rem;
+  }
+  .feat .ft {
+    font-family: 'STSong','SimSun',serif; font-size: 1.15rem; font-weight: 400;
+    line-height: 1.7; color: rgba(0,0,0,0.55);
+  }
+
+  .d-yellow { position: absolute; left: 3rem; bottom: 30%; z-index: 2; width: 50px; height: auto; opacity: 0.65; }
+  .d-yellow svg { width: 100%; height: auto; display: block; }
+  .d-bar { position: absolute; left: 3rem; top: 53%; z-index: 2; width: 28px; height: 2.5px; background: rgba(0,0,0,0.1); }
+  .d-pig { position: absolute; bottom: 2.8rem; right: 3rem; z-index: 2; font-size: 1.45rem; opacity: 0.18; pointer-events: none; }
+
+  .bone-deco { position: absolute; z-index: 2; pointer-events: none; opacity: 0.2; }
+  .bone-deco svg { width: 100%; height: auto; display: block; }
+  .bd1 { top: 8%; left: 10%; width: 55px; transform: rotate(15deg); }
+  .bd2 { top: 16%; right: 7%; width: 50px; transform: rotate(-25deg); }
+  .bd3 { bottom: 22%; right: 12%; width: 46px; transform: rotate(22deg); }
+  .bd4 { bottom: 18%; left: 22%; width: 42px; transform: rotate(-12deg); }
+  .bd5 { top: 42%; left: 6%; width: 38px; transform: rotate(40deg); }
+
+  .click-hint {
+    position: absolute; bottom: 1.2rem; left: 50%; transform: translateX(-50%); z-index: 5;
+    font-family: 'PingFang SC','Microsoft YaHei',sans-serif; font-size: 0.55rem; letter-spacing: 0.25em;
+    color: rgba(0,0,0,0.18); text-transform: uppercase;
+    animation: hint-pulse 3s ease-in-out infinite;
+  }
+  @keyframes hint-pulse { 0%,100% { opacity: 0.18; } 50% { opacity: 0.4; } }
+
+  /* ============================================ */
+  /* CHAPTER 02 — 骨头集团3.0 · 海街日记              */
+  /* ============================================ */
+  .inner-pages { position: absolute; inset: 0; z-index: 1; overflow-y: auto; overflow-x: hidden; }
+  .chapter02 {
+    width: 100%; min-height: 100vh;
+    background: #ffffff;
+    padding: 5vw 4vw 4vw 4vw;
+    font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    color: #1e2a2c;
+    line-height: 1.3;
+  }
+
+  .header { margin-bottom: 4vw; border-bottom: 2px solid #111; padding-bottom: 3vw; }
+  .logo-row { display: flex; align-items: baseline; flex-wrap: wrap; column-gap: 1vw; row-gap: 0.5vw; margin-bottom: 0.5vw; }
+  .bone-logo {
+    font-family: 'Luckiest Guy', cursive;
+    font-size: clamp(2.5rem, 8vw, 4.2rem);
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    color: #d32f2f;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+  .bone-sub {
+    font-family: 'Luckiest Guy', cursive;
+    font-size: clamp(0.9rem, 3vw, 1.4rem);
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    color: #1a5c6e;
+    text-transform: uppercase;
+  }
+  .issue-meta {
+    font-size: clamp(0.7rem, 2.5vw, 0.85rem);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: #5a4a3a;
+    margin-top: 0.5vw;
+    margin-bottom: 1vw;
+    display: inline-block;
+  }
+  .bone-boys-group { margin-top: 1vw; }
+  .bone-boys {
+    font-family: 'Luckiest Guy', cursive;
+    font-size: clamp(2rem, 7vw, 3.2rem);
+    font-weight: 400;
+    letter-spacing: 0.01em;
+    color: #1e3a3f;
+    line-height: 1.1;
+    margin-bottom: 0;
+  }
+  .summer-issue {
+    font-family: 'Luckiest Guy', cursive;
+    font-size: clamp(0.9rem, 3vw, 1.3rem);
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    color: #c0652c;
+    line-height: 1.2;
+    margin-bottom: 0.2vw;
+  }
+  .vibe-text {
+    font-family: 'Luckiest Guy', cursive;
+    font-size: clamp(1.1rem, 4vw, 1.8rem);
+    font-weight: 400;
+    color: #2f6b6b;
+    letter-spacing: 0.02em;
+    line-height: 1.2;
+    margin-bottom: 0.5vw;
+  }
+  .hero-wrapper { margin-top: 1.5vw; text-align: left; }
+  .wobbly-line {
+    font-family: 'Luckiest Guy', cursive;
+    font-size: clamp(1.6rem, 6vw, 3rem);
+    font-weight: 400;
+    letter-spacing: clamp(0.2rem, 2vw, 0.5rem);
+    color: #c7451b;
+    display: inline-block;
+    word-break: keep-all;
+  }
+  .wobbly-char { display: inline-block; }
+  .wobbly-char:nth-child(1) { transform: rotate(-4deg); }
+  .wobbly-char:nth-child(2) { transform: rotate(3.5deg); }
+  .wobbly-char:nth-child(3) { transform: rotate(-2.5deg); }
+  .wobbly-char:nth-child(4) { transform: rotate(4.2deg); }
+  .wobbly-char:nth-child(5) { transform: rotate(-3deg); }
+  .wobbly-char:nth-child(6) { transform: rotate(2deg); }
+  .wobbly-char:nth-child(7) { transform: rotate(-3.8deg); }
+  .wobbly-char:nth-child(8) { transform: rotate(2.8deg); }
+  .wobbly-char:nth-child(9) { transform: rotate(-2deg); }
+  .wobbly-char:nth-child(10) { transform: rotate(4.5deg); }
+  .wobbly-char:nth-child(11) { transform: rotate(-3.2deg); }
+  .wobbly-char:nth-child(12) { transform: rotate(1.8deg); }
+  .wobbly-char:nth-child(13) { transform: rotate(-4.5deg); }
+  .wobbly-char:nth-child(14) { transform: rotate(3deg); }
+
+  /* ── Photo Grid ── */
+  .photo-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5vw; margin: 3vw 0; }
+  .photo-frame {
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    background-color: #e0d8cc;
+    position: relative;
+    overflow: hidden;
+    border: 2px solid #111;
+  }
+  .photo-frame img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .photo-index {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    font-family: 'Luckiest Guy', cursive;
+    font-size: clamp(0.7rem, 2vw, 0.9rem);
+    font-weight: 400;
+    color: #fff;
+    background: #d32f2f;
+    padding: 0.1rem 0.6rem;
+  }
+  .photo-card:nth-child(1) .photo-frame { background: #c7bc9f; }
+  .photo-card:nth-child(2) .photo-frame { background: #b9cbcc; }
+  .photo-card:nth-child(3) .photo-frame { background: #dfcbad; }
+  .photo-card:nth-child(4) .photo-frame { background: #c3b1a2; }
+  .photo-card:nth-child(5) .photo-frame { background: #bed3d0; }
+  .photo-card:nth-child(6) .photo-frame { background: #e2cfaf; }
+
+  /* ── OCEAN DAYS ── */
+  .ocean-section { margin: 2vw 0; border-top: 2px solid #111; padding-top: 2vw; }
+  .ocean-title {
+    font-family: 'Luckiest Guy', cursive;
+    font-size: clamp(2rem, 8vw, 4rem);
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    color: #1f5e63;
+    margin-bottom: 1vw;
+  }
+  .ocean-sub { font-size: clamp(0.9rem, 3vw, 1.2rem); font-weight: 800; color: #3a5e5e; margin-bottom: 0.5vw; }
+  .ocean-sub span { margin-right: 1.5vw; }
+  .extra-line {
+    margin-top: 0.8vw;
+    font-size: clamp(0.8rem, 2.5vw, 1rem);
+    font-weight: 700;
+    color: #b5651e;
+    border-left: 3px solid #ffaa44;
+    padding-left: 0.8rem;
+  }
+
+  /* ── Bottom ── */
+  .bottom-nav { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; margin: 2vw 0 1vw 0; padding-top: 0.5vw; }
+  .back-cover {
+    font-family: 'Luckiest Guy', cursive;
+    font-size: clamp(0.8rem, 3vw, 1.1rem);
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #d32f2f;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+  .back-cover:hover { opacity: 0.7; }
+  .mag-links { display: flex; gap: 3vw; }
+  .mag-link { font-size: clamp(0.7rem, 2.5vw, 0.85rem); font-weight: 700; letter-spacing: 1px; color: #5a4a3a; }
+  .simple-row { display: flex; justify-content: space-between; flex-wrap: wrap; margin: 1vw 0; font-size: clamp(0.7rem, 2.5vw, 0.85rem); font-weight: 600; color: #5a5a4a; border-top: 1px solid #e0d8cc; padding-top: 1vw; }
+  .city-tag-row { display: flex; flex-wrap: wrap; gap: 2vw; margin: 1vw 0 0.8vw 0; }
+  .city-tag { font-size: clamp(0.6rem, 2vw, 0.75rem); font-weight: 700; letter-spacing: 1px; color: #c0652c; }
+  .beach-club-line { font-size: clamp(0.65rem, 2.2vw, 0.8rem); font-weight: 700; letter-spacing: 1px; color: #8b6f50; margin: 0.5vw 0; }
+  .taiwan-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 1vw; font-size: clamp(0.6rem, 2vw, 0.75rem); font-weight: 700; color: #5a4a3a; border-top: 1px solid #e0d8cc; padding-top: 1vw; }
+
+  @media (max-width: 768px) { .photo-grid { gap: 2vw; } }
+  @media (max-width: 480px) { .chapter02 { padding: 4vw; } .photo-grid { gap: 3vw; } }
+</style>
+</head>
+<body>
+
+<div class="magazine">
+
+  <!-- COVER PAGE -->
+  <div class="cover-page" id="coverPage">
+    <div class="cover-inner">
+
+      <div class="vol">VOL.01 &mdash; 2026</div>
+      <div class="tagline">MAGAZINE FOR CITY BOYS</div>
+
+      <div class="est"><div class="l1">EST.</div><div class="l2">High School<br>Forever</div></div>
+
+      <div class="d-yellow">
+        <svg viewBox="0 0 500 200" fill="none"><ellipse cx="50" cy="100" rx="46" ry="52" fill="#2565ae" stroke="#1a2d4a" stroke-width="9"/><ellipse cx="450" cy="100" rx="46" ry="52" fill="#2565ae" stroke="#1a2d4a" stroke-width="9"/><rect x="50" y="68" width="400" height="64" rx="22" fill="#2565ae" stroke="#1a2d4a" stroke-width="8"/></svg>
+      </div>
+      <div class="d-bar"></div>
+
+      <div class="bone-deco bd1"><svg viewBox="0 0 500 200" fill="none"><ellipse cx="50" cy="100" rx="46" ry="52" fill="#2565ae" stroke="#1a2d4a" stroke-width="9"/><ellipse cx="450" cy="100" rx="46" ry="52" fill="#2565ae" stroke="#1a2d4a" stroke-width="9"/><rect x="50" y="68" width="400" height="64" rx="22" fill="#2565ae" stroke="#1a2d4a" stroke-width="8"/></svg></div>
+      <div class="bone-deco bd2"><svg viewBox="0 0 500 200" fill="none"><ellipse cx="50" cy="100" rx="46" ry="52" fill="#2565ae" stroke="#1a2d4a" stroke-width="9"/><ellipse cx="450" cy="100" rx="46" ry="52" fill="#2565ae" stroke="#1a2d4a" stroke-width="9"/><rect x="50" y="68" width="400" height="64" rx="22" fill="#2565ae" stroke="#1a2d4a" stroke-width="8"/></svg></div>
+      <div class="bone-deco bd3"><svg viewBox="0 0 500 200" fill="none"><ellipse cx="50" cy="100" rx="46" ry="52" fill="#2565ae" stroke="#1a2d4a" stroke-width="9"/><ellipse cx="450" cy="100" rx="46" ry="52" fill="#2565ae" stroke="#1a2d4a" stroke-width="9"/><rect x="50" y="68" width="400" height="64" rx="22" fill="#2565ae" stroke="#1a2d4a" stroke-width="8"/></svg></div>
+      <div class="bone-deco bd4"><svg viewBox="0 0 500 200" fill="none"><ellipse cx="50" cy="100" rx="46" ry="52" fill="#2565ae" stroke="#1a2d4a" stroke-width="9"/><ellipse cx="450" cy="100" rx="46" ry="52" fill="#2565ae" stroke="#1a2d4a" stroke-width="9"/><rect x="50" y="68" width="400" height="64" rx="22" fill="#2565ae" stroke="#1a2d4a" stroke-width="8"/></svg></div>
+      <div class="bone-deco bd5"><svg viewBox="0 0 500 200" fill="none"><ellipse cx="50" cy="100" rx="46" ry="52" fill="#2565ae" stroke="#1a2d4a" stroke-width="9"/><ellipse cx="450" cy="100" rx="46" ry="52" fill="#2565ae" stroke="#1a2d4a" stroke-width="9"/><rect x="50" y="68" width="400" height="64" rx="22" fill="#2565ae" stroke="#1a2d4a" stroke-width="8"/></svg></div>
+
+      <div class="center">
+        <div class="bone-title">BONE</div>
+        <div class="bone-icon" id="boneLogo" title="Open magazine">
+          <svg viewBox="0 0 500 200" fill="none"><ellipse cx="50" cy="100" rx="46" ry="52" fill="#2565ae" stroke="#1a2d4a" stroke-width="9"/><ellipse cx="450" cy="100" rx="46" ry="52" fill="#2565ae" stroke="#1a2d4a" stroke-width="9"/><rect x="50" y="68" width="400" height="64" rx="22" fill="#2565ae" stroke="#1a2d4a" stroke-width="8"/></svg>
+        </div>
+        <div class="bone-cn">骨 头 集 团</div>
+      </div>
+
+      <div class="feat"><div class="fl">FEATURE</div><div class="ft">This is a team of six fucking people formed in high school. Each person has a different personality and a distinct character.</div></div>
+
+      <div class="d-pig">&#x1F437;</div>
+      <div class="click-hint">Click the bone to open</div>
+    </div>
+  </div>
+
+  <!-- CHAPTER 02 — 骨头集团3.0 · 海街日记 -->
+  <div class="inner-pages" id="innerPages">
+    <div class="chapter02">
+
+      <div class="header">
+        <div class="logo-row">
+          <div class="bone-logo">BONE</div>
+          <div class="bone-sub">骨头集团</div>
+        </div>
+        <div class="issue-meta">ISSUE 01 — SUMMER 2026 — VOL. 01</div>
+        <div class="bone-boys-group">
+          <div class="bone-boys">BONE BOYS</div>
+          <div class="summer-issue">SUMMER ISSUE</div>
+          <div class="vibe-text">GOOD VIBES AND TAN LINES.</div>
+        </div>
+        <div class="hero-wrapper">
+          <div class="wobbly-line">
+            <span class="wobbly-char">骨</span><span class="wobbly-char">头</span><span class="wobbly-char">集</span><span class="wobbly-char">团</span><span class="wobbly-char">3</span><span class="wobbly-char">.</span><span class="wobbly-char">0</span><span class="wobbly-char"> </span><span class="wobbly-char">·</span><span class="wobbly-char"> </span><span class="wobbly-char">海</span><span class="wobbly-char">街</span><span class="wobbly-char">日</span><span class="wobbly-char">记</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="photo-grid">
+        <div class="photo-card"><div class="photo-frame"><img src="team-1.jpg" alt=""><div class="photo-index">PHOTO-01</div></div></div>
+        <div class="photo-card"><div class="photo-frame"><img src="team-3.jpg" alt=""><div class="photo-index">PHOTO-02</div></div></div>
+        <div class="photo-card"><div class="photo-frame"><img src="team-4.jpg" alt=""><div class="photo-index">PHOTO-03</div></div></div>
+        <div class="photo-card"><div class="photo-frame"><img src="team-5.jpg" alt=""><div class="photo-index">PHOTO-04</div></div></div>
+        <div class="photo-card"><div class="photo-frame"><img src="team-6.jpg" alt=""><div class="photo-index">PHOTO-05</div></div></div>
+        <div class="photo-card"><div class="photo-frame"><img src="team-f.jpg" alt=""><div class="photo-index">PHOTO-06</div></div></div>
+      </div>
+
+      <div class="ocean-section">
+        <div class="ocean-title">OCEAN DAYS</div>
+        <div class="ocean-sub">
+          <span>Six boys.</span>
+          <span>One bone.</span>
+          <span>Endless summer.</span>
+        </div>
+        <div class="extra-line">Endless summer : 海岸线记忆</div>
+      </div>
+
+      <div class="bottom-nav">
+        <button class="back-cover" id="backToCoverBtn">&larr; BACK TO COVER</button>
+        <div class="mag-links">
+          <span class="mag-link">BONE MAGAZINE</span>
+          <span class="mag-link">SUMMER ARCHIVE</span>
+        </div>
+      </div>
+
+      <div class="simple-row">
+        <span>BONEMAGAZINE</span>
+        <span>Keeping it simple. Keeping it real.</span>
+      </div>
+
+      <div class="city-tag-row">
+        <span class="city-tag">COASTAL CITY BOYS</span>
+        <span class="city-tag">BEACHSIDE MEMORIES</span>
+        <span class="city-tag">SEA BREEZE COLLECTION</span>
+      </div>
+
+      <div class="beach-club-line">BONE BEACH CLUB — CITY BOYS ON THE COAST</div>
+
+      <div class="taiwan-footer">
+        <span>TAIWAN 2026 SUMMER</span>
+        <span>01</span>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const coverPage = document.getElementById('coverPage');
+  document.getElementById('boneLogo').addEventListener('click',()=>{coverPage.classList.add('open');});
+  document.getElementById('backToCoverBtn').addEventListener('click',()=>{
+    coverPage.classList.remove('open');
+    document.querySelector('.inner-pages').scrollTop = 0;
+  });
+</script>
+
+</body>
+</html>
