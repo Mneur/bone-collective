@@ -36,11 +36,6 @@
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.5' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
     background-size: 100px 100px;
   }
-  .cover-page::after {
-    content: ''; position: absolute; top: 0; right: 0; bottom: 0; width: 60px;
-    background: linear-gradient(to right,rgba(0,0,0,0.03),rgba(0,0,0,0.12));
-    pointer-events: none; z-index: 11; transition: opacity 1s;
-  }
 
   .vol {
     position: absolute; top: 2.8rem; left: 3rem; z-index: 3;
@@ -106,7 +101,6 @@
   .d-yellow { position: absolute; left: 3rem; bottom: 30%; z-index: 2; width: 50px; height: auto; opacity: 0.65; }
   .d-yellow svg { width: 100%; height: auto; display: block; }
   .d-bar { position: absolute; left: 3rem; top: 53%; z-index: 2; width: 28px; height: 2.5px; background: rgba(0,0,0,0.1); }
-  .d-pig { position: absolute; bottom: 2.8rem; right: 3rem; z-index: 2; font-size: 1.45rem; opacity: 0.18; pointer-events: none; }
 
   .bone-deco { position: absolute; z-index: 2; pointer-events: none; opacity: 0.2; }
   .bone-deco svg { width: 100%; height: auto; display: block; }
@@ -139,7 +133,6 @@
     .feat .ft { font-size: clamp(0.75rem, 2vw, 0.9rem); line-height: 1.5; }
     .d-yellow { left: 1.2rem; bottom: 32%; width: clamp(30px, 8vw, 45px); opacity: 0.5; }
     .d-bar { left: 1.2rem; width: clamp(16px, 4vw, 24px); }
-    .d-pig { bottom: 2.5rem; right: 1.2rem; font-size: clamp(0.9rem, 2.5vw, 1.2rem); }
     .bone-deco { opacity: 0.08; }
     .bd1 { width: clamp(28px, 7vw, 40px); top: 5%; left: 8%; }
     .bd2 { width: clamp(24px, 6vw, 35px); top: 12%; right: 5%; }
@@ -147,7 +140,6 @@
     .bd4 { width: clamp(20px, 5vw, 30px); bottom: 16%; left: 16%; }
     .bd5 { width: clamp(18px, 4.5vw, 26px); top: 38%; left: 4%; }
     .click-hint { font-size: clamp(0.35rem, 1vw, 0.45rem); bottom: 0.8rem; }
-    .cover-page::after { width: 30px; }
   }
   @media (max-width: 400px) {
     .cover-page .center .bone-title { font-size: clamp(3.5rem, 16vw, 5rem); }
@@ -156,10 +148,8 @@
     .est { display: none; }
     .d-yellow, .d-bar { display: none; }
     .bone-deco { display: none; }
-    .cover-page::after { display: none; }
     .feat { bottom: 1.5rem; left: 1rem; max-width: 80vw; }
     .feat .ft { font-size: 0.7rem; line-height: 1.4; }
-    .d-pig { bottom: 1.5rem; right: 1rem; font-size: 0.8rem; }
     .tagline { font-size: 0.4rem; right: 1rem; }
     .click-hint { font-size: 0.35rem; bottom: 0.5rem; }
   }
@@ -369,7 +359,6 @@
 
       <div class="feat"><div class="fl">FEATURE</div><div class="ft">This is a team of six fucking people formed in high school. Each person has a different personality and a distinct character.</div></div>
 
-      <div class="d-pig">&#x1F437;</div>
       <div class="click-hint">Click the bone to open</div>
     </div>
   </div>
