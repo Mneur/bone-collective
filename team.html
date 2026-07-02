@@ -157,7 +157,135 @@
   /* ============================================ */
   /* CHAPTER 02 — 骨头集团3.0 · 海街日记              */
   /* ============================================ */
-  .inner-pages { position: absolute; inset: 0; z-index: 1; overflow-y: auto; overflow-x: hidden; }
+  .inner-pages { position: absolute; inset: 0; z-index: 1; overflow: hidden; }
+
+  /* ── Page Slider ── */
+  .pages-slider { display: flex; width: 200%; height: 100%; transition: transform 0.6s cubic-bezier(0.4,0,0.2,1); }
+  .pages-slider.to-page3 { transform: translateX(-50%); }
+  .page-02, .page-03 { flex: 0 0 50%; height: 100%; overflow-y: auto; overflow-x: hidden; }
+  .page-03 { background: #ffffff; }
+  .page-02 { background: #faf8f3; }
+
+  /* ── Page Nav Bar ── */
+  .page-nav {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1.2vw min(4vw, 64px);
+    font-family: 'Luckiest Guy', cursive;
+    border-bottom: 1px solid rgba(0,0,0,0.08);
+    position: sticky; top: 0; z-index: 5; background: inherit;
+  }
+  .page-nav-bottom {
+    border-top: 1px solid rgba(0,0,0,0.08); border-bottom: none;
+    position: sticky; bottom: 0;
+  }
+  .nav-btn {
+    font-family: 'Luckiest Guy', cursive;
+    font-size: clamp(0.65rem, 2vw, 0.85rem);
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #d32f2f;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.3rem 0;
+    transition: opacity 0.2s;
+  }
+  .nav-btn:hover { opacity: 0.6; }
+  .nav-page-num {
+    font-family: 'Luckiest Guy', cursive;
+    font-size: clamp(0.8rem, 2.5vw, 1.1rem);
+    font-weight: 400;
+    color: #2565ae;
+    letter-spacing: 0.05em;
+  }
+
+  /* ── Page 02: MEET THE CREW ── */
+  .crew-header {
+    text-align: center;
+    padding: min(4vw, 40px) min(4vw, 64px) min(2vw, 20px);
+  }
+  .crew-title {
+    font-family: 'Luckiest Guy', cursive;
+    font-size: clamp(2.5rem, 8vw, 5rem);
+    font-weight: 400;
+    letter-spacing: 0.03em;
+    color: #1e3a3f;
+    line-height: 1;
+  }
+  .crew-sub {
+    font-family: 'Luckiest Guy', cursive;
+    font-size: clamp(1rem, 3vw, 1.6rem);
+    font-weight: 400;
+    color: #c0652c;
+    margin-top: 0.5vw;
+    letter-spacing: 0.05em;
+  }
+  .crew-wobbly {
+    font-family: 'Luckiest Guy', cursive;
+    font-size: clamp(1.4rem, 5vw, 2.4rem);
+    font-weight: 400;
+    color: #d32f2f;
+    margin-top: 0.8vw;
+    display: inline-block;
+  }
+  .crew-wobbly .wobbly-char { display: inline-block; }
+
+  /* ── Crew Grid ── */
+  .crew-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: min(2vw, 24px);
+    padding: 0 min(4vw, 64px) min(4vw, 40px);
+  }
+  .crew-card {
+    background: #fff;
+    border: 2px solid #111;
+    text-align: center;
+    padding-bottom: min(2vw, 20px);
+  }
+  .crew-card:nth-child(1) { background: #fef9e7; }
+  .crew-card:nth-child(2) { background: #eaf4f0; }
+  .crew-card:nth-child(3) { background: #fce4e4; }
+  .crew-card:nth-child(4) { background: #e8f0fa; }
+  .crew-card:nth-child(5) { background: #f5f0e8; }
+  .crew-card:nth-child(6) { background: #f0e6f6; }
+  .crew-photo {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    background: rgba(0,0,0,0.03);
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+  }
+  .crew-photo img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+  }
+  .crew-name {
+    font-family: 'Luckiest Guy', cursive;
+    font-size: clamp(1rem, 3vw, 1.5rem);
+    font-weight: 400;
+    color: #1e3a3f;
+    margin-top: min(1vw, 12px);
+    letter-spacing: 0.03em;
+  }
+  .crew-tag {
+    font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    font-size: clamp(0.65rem, 2vw, 0.8rem);
+    font-weight: 600;
+    color: #8b6f50;
+    margin-top: 0.3vw;
+    letter-spacing: 0.05em;
+  }
+
+  @media (max-width: 768px) {
+    .crew-grid { grid-template-columns: repeat(2, 1fr); gap: 3vw; }
+    .page-nav { padding: 2vw 4vw; }
+  }
+  @media (max-width: 480px) {
+    .crew-grid { grid-template-columns: 1fr; gap: 4vw; }
+  }
+
   .chapter02 {
     width: 100%; min-height: 100vh;
     background: #ffffff;
@@ -363,71 +491,140 @@
     </div>
   </div>
 
-  <!-- CHAPTER 02 — 骨头集团3.0 · 海街日记 -->
+  <!-- INNER PAGES -->
   <div class="inner-pages" id="innerPages">
-    <div class="chapter02">
+    <div class="pages-slider" id="pagesSlider">
 
-      <div class="header">
-        <div class="logo-row">
-          <div class="bone-logo">BONE</div>
-          <div class="bone-sub">骨头集团</div>
+      <!-- PAGE 02 — MEET THE CREW -->
+      <div class="page-02" id="page02">
+        <div class="page-nav">
+          <button class="nav-btn" onclick="closeCover()">&larr; BACK TO COVER</button>
+          <span class="nav-page-num">02</span>
+          <button class="nav-btn" onclick="goToPage3()">NEXT &rarr;</button>
         </div>
-        <div class="issue-meta">ISSUE 01 — WINTER 2026 — VOL. 01</div>
-        <div class="bone-boys-group">
-          <div class="bone-boys">BONE BOYS</div>
-          <div class="summer-issue">WINTER ISSUE</div>
-          <div class="vibe-text">GOOD VIBES AND COLD WAVES.</div>
-        </div>
-        <div class="hero-wrapper">
-          <div class="wobbly-line">
-            <span class="wobbly-char">骨</span><span class="wobbly-char">头</span><span class="wobbly-char">集</span><span class="wobbly-char">团</span><span class="wobbly-char">3</span><span class="wobbly-char">.</span><span class="wobbly-char">0</span><span class="wobbly-char"> </span><span class="wobbly-char">·</span><span class="wobbly-char"> </span><span class="wobbly-char">海</span><span class="wobbly-char">街</span><span class="wobbly-char">日</span><span class="wobbly-char">记</span>
+
+        <div class="crew-header">
+          <div class="crew-title">MEET THE CREW</div>
+          <div class="crew-sub">THE SIX BEHIND THE BONE</div>
+          <div class="crew-wobbly">
+            <span class="wobbly-char">骨</span><span class="wobbly-char">头</span><span class="wobbly-char">少</span><span class="wobbly-char">年</span>
           </div>
         </div>
-      </div>
 
-      <div class="photo-grid">
-        <div class="photo-card"><div class="photo-frame"><img src="team-1.jpg" alt=""><div class="photo-index">PHOTO-01</div></div></div>
-        <div class="photo-card"><div class="photo-frame"><img src="team-3.jpg" alt=""><div class="photo-index">PHOTO-02</div></div></div>
-        <div class="photo-card"><div class="photo-frame"><img src="team-4.jpg" alt=""><div class="photo-index">PHOTO-03</div></div></div>
-        <div class="photo-card"><div class="photo-frame"><img src="team-5.jpg" alt=""><div class="photo-index">PHOTO-04</div></div></div>
-        <div class="photo-card"><div class="photo-frame"><img src="team-6.jpg" alt=""><div class="photo-index">PHOTO-05</div></div></div>
-        <div class="photo-card"><div class="photo-frame"><img src="team-f.jpg" alt=""><div class="photo-index">PHOTO-06</div></div></div>
-      </div>
-
-      <div class="ocean-section">
-        <div class="ocean-title">OCEAN DAYS</div>
-        <div class="ocean-sub">
-          <span>Six boys.</span>
-          <span>One bone.</span>
-          <span>Winter shores.</span>
+        <div class="crew-grid">
+          <div class="crew-card">
+            <div class="crew-photo"><img src="crew/Mneur%20Chan.jpg" alt=""></div>
+            <div class="crew-name">Mneur Chan</div>
+            <div class="crew-tag">BATMAN</div>
+          </div>
+          <div class="crew-card">
+            <div class="crew-photo"><img src="crew/bone%20沈柴.png" alt=""></div>
+            <div class="crew-name">bone 沈柴</div>
+            <div class="crew-tag">火柴人</div>
+          </div>
+          <div class="crew-card">
+            <div class="crew-photo"><img src="crew/insane%20Cheung.png" alt=""></div>
+            <div class="crew-name">insane Cheung</div>
+            <div class="crew-tag">癫狂的人</div>
+          </div>
+          <div class="crew-card">
+            <div class="crew-photo"><img src="crew/ass%20裴.jpg" alt=""></div>
+            <div class="crew-name">ass 裴</div>
+            <div class="crew-tag">BITCH ASS</div>
+          </div>
+          <div class="crew-card">
+            <div class="crew-photo"><img src="crew/poison%20gen.png" alt=""></div>
+            <div class="crew-name">poison gen</div>
+            <div class="crew-tag">TOXIC</div>
+          </div>
+          <div class="crew-card">
+            <div class="crew-photo"><img src="crew/liar%20鸿.png" alt=""></div>
+            <div class="crew-name">liar 鸿</div>
+            <div class="crew-tag">FUCKING LIAR</div>
+          </div>
         </div>
-        <div class="extra-line">Winter shores : 海岸线记忆</div>
-      </div>
 
-      <div class="bottom-nav">
-        <button class="back-cover" id="backToCoverBtn">&larr; BACK TO COVER</button>
-        <div class="mag-links">
-          <span class="mag-link">BONE MAGAZINE</span>
-          <span class="mag-link">WINTER ARCHIVE</span>
+        <div class="page-nav page-nav-bottom">
+          <button class="nav-btn" onclick="closeCover()">&larr; BACK TO COVER</button>
+          <span class="nav-page-num">02</span>
+          <button class="nav-btn" onclick="goToPage3()">NEXT &rarr;</button>
         </div>
       </div>
 
-      <div class="simple-row">
-        <span>BONEMAGAZINE</span>
-        <span>Keeping it simple. Keeping it real.</span>
-      </div>
+      <!-- PAGE 03 — 骨头集团3.0 · 海街日记 -->
+      <div class="page-03" id="page03">
+        <div class="page-nav">
+          <button class="nav-btn" onclick="goToPage2()">&larr; PREV</button>
+          <span class="nav-page-num">03</span>
+          <button class="nav-btn" onclick="closeCover()">BACK TO COVER &rarr;</button>
+        </div>
 
-      <div class="city-tag-row">
-        <span class="city-tag">COASTAL CITY BOYS</span>
-        <span class="city-tag">BEACHSIDE MEMORIES</span>
-        <span class="city-tag">SEA BREEZE COLLECTION</span>
-      </div>
+        <div class="chapter02">
 
-      <div class="beach-club-line">BONE BEACH CLUB — CITY BOYS ON THE COAST</div>
+          <div class="header">
+            <div class="logo-row">
+              <div class="bone-logo">BONE</div>
+              <div class="bone-sub">骨头集团</div>
+            </div>
+            <div class="issue-meta">ISSUE 01 — WINTER 2026 — VOL. 01</div>
+            <div class="bone-boys-group">
+              <div class="bone-boys">BONE BOYS</div>
+              <div class="summer-issue">WINTER ISSUE</div>
+              <div class="vibe-text">GOOD VIBES AND COLD WAVES.</div>
+            </div>
+            <div class="hero-wrapper">
+              <div class="wobbly-line">
+                <span class="wobbly-char">骨</span><span class="wobbly-char">头</span><span class="wobbly-char">集</span><span class="wobbly-char">团</span><span class="wobbly-char">3</span><span class="wobbly-char">.</span><span class="wobbly-char">0</span><span class="wobbly-char"> </span><span class="wobbly-char">·</span><span class="wobbly-char"> </span><span class="wobbly-char">海</span><span class="wobbly-char">街</span><span class="wobbly-char">日</span><span class="wobbly-char">记</span>
+              </div>
+            </div>
+          </div>
 
-      <div class="taiwan-footer">
-        <span>CHINA MAOMING 2026 WINTER</span>
-        <span>01</span>
+          <div class="photo-grid">
+            <div class="photo-card"><div class="photo-frame"><img src="team-1.jpg" alt=""><div class="photo-index">PHOTO-01</div></div></div>
+            <div class="photo-card"><div class="photo-frame"><img src="team-3.jpg" alt=""><div class="photo-index">PHOTO-02</div></div></div>
+            <div class="photo-card"><div class="photo-frame"><img src="team-4.jpg" alt=""><div class="photo-index">PHOTO-03</div></div></div>
+            <div class="photo-card"><div class="photo-frame"><img src="team-5.jpg" alt=""><div class="photo-index">PHOTO-04</div></div></div>
+            <div class="photo-card"><div class="photo-frame"><img src="team-6.jpg" alt=""><div class="photo-index">PHOTO-05</div></div></div>
+            <div class="photo-card"><div class="photo-frame"><img src="team-f.jpg" alt=""><div class="photo-index">PHOTO-06</div></div></div>
+          </div>
+
+          <div class="ocean-section">
+            <div class="ocean-title">OCEAN DAYS</div>
+            <div class="ocean-sub">
+              <span>Six boys.</span>
+              <span>One bone.</span>
+              <span>Winter shores.</span>
+            </div>
+            <div class="extra-line">Winter shores : 海岸线记忆</div>
+          </div>
+
+          <div class="bottom-nav">
+            <button class="back-cover" onclick="closeCover()">&larr; BACK TO COVER</button>
+            <div class="mag-links">
+              <span class="mag-link">BONE MAGAZINE</span>
+              <span class="mag-link">WINTER ARCHIVE</span>
+            </div>
+          </div>
+
+          <div class="simple-row">
+            <span>BONEMAGAZINE</span>
+            <span>Keeping it simple. Keeping it real.</span>
+          </div>
+
+          <div class="city-tag-row">
+            <span class="city-tag">COASTAL CITY BOYS</span>
+            <span class="city-tag">BEACHSIDE MEMORIES</span>
+            <span class="city-tag">SEA BREEZE COLLECTION</span>
+          </div>
+
+          <div class="beach-club-line">BONE BEACH CLUB — CITY BOYS ON THE COAST</div>
+
+          <div class="taiwan-footer">
+            <span>CHINA MAOMING 2026 WINTER</span>
+            <span>03</span>
+          </div>
+
+        </div>
       </div>
 
     </div>
@@ -437,11 +634,28 @@
 
 <script>
   const coverPage = document.getElementById('coverPage');
-  document.getElementById('boneLogo').addEventListener('click',()=>{coverPage.classList.add('open');});
-  document.getElementById('backToCoverBtn').addEventListener('click',()=>{
-    coverPage.classList.remove('open');
-    document.querySelector('.inner-pages').scrollTop = 0;
+  const pagesSlider = document.getElementById('pagesSlider');
+  const page02 = document.getElementById('page02');
+  const page03 = document.getElementById('page03');
+
+  document.getElementById('boneLogo').addEventListener('click', () => {
+    coverPage.classList.add('open');
   });
+
+  function goToPage3() {
+    pagesSlider.classList.add('to-page3');
+    page03.scrollTop = 0;
+  }
+  function goToPage2() {
+    pagesSlider.classList.remove('to-page3');
+    page02.scrollTop = 0;
+  }
+  function closeCover() {
+    coverPage.classList.remove('open');
+    pagesSlider.classList.remove('to-page3');
+    page02.scrollTop = 0;
+    page03.scrollTop = 0;
+  }
 </script>
 
 </body>
