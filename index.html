@@ -1,662 +1,720 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BONE COLLECTIVE</title>
-<style>
-  @font-face {
-    font-family: 'Luckiest Guy';
-    font-style: normal;
-    font-weight: 400;
-    font-display: swap;
-    src: url('fonts/LuckiestGuy.ttf') format('truetype');
-  }
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>BONE Collective</title>
+    <style>
+      @font-face {
+        font-family: "Luckiest";
+        src: url("fonts/LuckiestGuy.ttf") format("truetype");
+        font-display: swap;
+      }
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+      :root {
+        --paper: #f6ecd0;
+        --paper-dark: #e7d7ab;
+        --ink: #15120d;
+        --navy: #173b55;
+        --sea: #2d7890;
+        --red: #d94831;
+        --spinach: #477c52;
+        --gold: #efc54e;
+        --white: #fffaf0;
+        --shadow: 8px 8px 0 var(--ink);
+      }
 
-  body { font-family: 'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', sans-serif; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+      * {
+        box-sizing: border-box;
+      }
 
-  .magazine { width: 100vw; height: 100vh; position: relative; overflow: hidden; perspective: 2000px; perspective-origin: left center; }
+      html {
+        scroll-behavior: smooth;
+      }
 
-  /* ============================================ */
-  /* COVER PAGE                                    */
-  /* ============================================ */
-  .cover-page {
-    position: absolute; inset: 0; z-index: 10;
-    transform-origin: left center;
-    transition: transform 1.4s cubic-bezier(0.4,0,0.2,1);
-    transform-style: preserve-3d;
-    background: linear-gradient(175deg,#f7f0de 0%,#f2e8d2 38%,#ece0c6 100%);
-  }
-  .cover-page.open { transform: rotateY(-130deg); pointer-events: none; }
-  .cover-page .cover-inner { width: 100%; height: 100%; position: relative; overflow: hidden; }
-  .cover-page .cover-inner::after {
-    content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 1; opacity: 0.018;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.5' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
-    background-size: 100px 100px;
-  }
+      body {
+        margin: 0;
+        color: var(--ink);
+        background:
+          linear-gradient(90deg, rgba(21, 18, 13, 0.035) 1px, transparent 1px),
+          linear-gradient(rgba(21, 18, 13, 0.025) 1px, transparent 1px),
+          var(--paper);
+        background-size: 22px 22px;
+        font-family: "Arial Black", Impact, system-ui, sans-serif;
+        letter-spacing: 0;
+      }
 
-  .vol {
-    position: absolute; top: 2.8rem; left: 3rem; z-index: 3;
-    font-family: 'PingFang SC','Microsoft YaHei',sans-serif; font-size: 0.72rem; font-weight: 500;
-    letter-spacing: 0.38em; color: rgba(0,0,0,0.28); text-transform: uppercase;
-  }
-  .tagline {
-    position: absolute; top: 2.8rem; right: 3rem; z-index: 3;
-    font-family: 'PingFang SC','Microsoft YaHei',sans-serif; font-size: 0.7rem; font-weight: 500;
-    letter-spacing: 0.3em; color: rgba(0,0,0,0.26); text-align: right; text-transform: uppercase;
-  }
-  .est { position: absolute; right: 3rem; top: 50%; transform: translateY(-50%); z-index: 3; text-align: right; }
-  .est .l1 {
-    font-family: 'PingFang SC','Microsoft YaHei',sans-serif; font-size: 0.85rem; font-weight: 600;
-    letter-spacing: 0.38em; color: rgba(0,0,0,0.22); text-transform: uppercase;
-  }
-  .est .l2 {
-    font-family: 'PingFang SC','Microsoft YaHei',sans-serif; font-size: 1.2rem; font-weight: 400;
-    color: rgba(0,0,0,0.3); line-height: 1.45;
-  }
+      img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
 
-  .center {
-    position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
-    z-index: 3; display: flex; flex-direction: column; align-items: center; text-align: center;
-  }
-  .center .bone-title {
-    font-family: 'Luckiest Guy','PingFang SC',sans-serif; font-size: clamp(5.5rem,13vw,9.5rem);
-    font-weight: 800; letter-spacing: -0.01em; line-height: 0.86; color: #000;
-    text-shadow: 2px 2px 0 rgba(175,65,65,0.2);
-    animation: in .85s cubic-bezier(.16,1,.3,1) both;
-  }
-  .center .bone-icon {
-    width: 200px; height: auto; margin-top: 0.8rem; margin-bottom: 0.45rem;
-    cursor: pointer; transition: transform .3s;
-    animation: in .85s .08s cubic-bezier(.16,1,.3,1) both;
-    position: relative; z-index: 20;
-  }
-  .center .bone-icon:hover { transform: scale(1.06); }
-  .center .bone-icon svg { width: 100%; height: auto; display: block; }
-  .center .bone-cn {
-    font-family: 'PingFang SC','Microsoft YaHei',sans-serif;
-    font-size: 1rem; font-weight: 500; letter-spacing: 0.5em; color: #444;
-    animation: in .85s .14s cubic-bezier(.16,1,.3,1) both;
-  }
-  @keyframes in {
-    from { opacity: 0; transform: translateY(14px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
 
-  .feat {
-    position: absolute; bottom: 2.8rem; left: 3rem; z-index: 3; max-width: 440px;
-    animation: in .85s .26s cubic-bezier(.16,1,.3,1) both;
-  }
-  .feat .fl {
-    font-family: 'PingFang SC','Microsoft YaHei',sans-serif; font-size: 0.72rem; font-weight: 700;
-    letter-spacing: 0.38em; text-transform: uppercase; color: #c43a2f; margin-bottom: 0.6rem;
-  }
-  .feat .ft {
-    font-family: 'STSong','SimSun',serif; font-size: 1.15rem; font-weight: 400;
-    line-height: 1.7; color: rgba(0,0,0,0.55);
-  }
+      .shell {
+        width: min(1180px, calc(100% - 32px));
+        margin: 0 auto;
+      }
 
-  .d-yellow { position: absolute; left: 3rem; bottom: 30%; z-index: 2; width: 50px; height: auto; opacity: 0.65; }
-  .d-yellow svg { width: 100%; height: auto; display: block; }
-  .d-bar { position: absolute; left: 3rem; top: 53%; z-index: 2; width: 28px; height: 2.5px; background: rgba(0,0,0,0.1); }
+      .topbar {
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        border-bottom: 4px solid var(--ink);
+        background: rgba(246, 236, 208, 0.92);
+        backdrop-filter: blur(10px);
+      }
 
-  .bone-deco { position: absolute; z-index: 2; pointer-events: none; opacity: 0.2; }
-  .bone-deco svg { width: 100%; height: auto; display: block; }
-  .bd1 { top: 8%; left: 10%; width: 55px; transform: rotate(15deg); }
-  .bd2 { top: 16%; right: 7%; width: 50px; transform: rotate(-25deg); }
-  .bd3 { bottom: 22%; right: 12%; width: 46px; transform: rotate(22deg); }
-  .bd4 { bottom: 18%; left: 22%; width: 42px; transform: rotate(-12deg); }
-  .bd5 { top: 42%; left: 6%; width: 38px; transform: rotate(40deg); }
+      .topbar-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 18px;
+        min-height: 72px;
+      }
 
-  .click-hint {
-    position: absolute; bottom: 1.2rem; left: 50%; transform: translateX(-50%); z-index: 5;
-    font-family: 'PingFang SC','Microsoft YaHei',sans-serif; font-size: 0.55rem; letter-spacing: 0.25em;
-    color: rgba(0,0,0,0.18); text-transform: uppercase;
-    animation: hint-pulse 3s ease-in-out infinite;
-  }
-  @keyframes hint-pulse { 0%,100% { opacity: 0.18; } 50% { opacity: 0.4; } }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        min-width: 0;
+      }
 
-  /* ── Cover Mobile ── */
-  @media (max-width: 768px) {
-    .cover-page .center .bone-title { font-size: clamp(4rem, 18vw, 7rem); }
-    .cover-page .center .bone-icon { width: clamp(120px, 38vw, 180px); }
-    .cover-page .center .bone-cn { font-size: clamp(0.8rem, 2.5vw, 1rem); letter-spacing: 0.4em; }
-    .vol { top: 1.2rem; left: 1.2rem; font-size: clamp(0.5rem, 1.5vw, 0.65rem); letter-spacing: 0.2em; }
-    .tagline { top: 1.2rem; right: 1.2rem; font-size: clamp(0.45rem, 1.3vw, 0.55rem); letter-spacing: 0.15em; }
-    .est { right: 1.2rem; }
-    .est .l1 { font-size: clamp(0.6rem, 1.8vw, 0.75rem); letter-spacing: 0.2em; }
-    .est .l2 { font-size: clamp(0.8rem, 2.2vw, 1rem); }
-    .feat { bottom: 2.5rem; left: 1.2rem; max-width: min(280px, 65vw); }
-    .feat .fl { font-size: clamp(0.5rem, 1.4vw, 0.6rem); letter-spacing: 0.2em; }
-    .feat .ft { font-size: clamp(0.75rem, 2vw, 0.9rem); line-height: 1.5; }
-    .d-yellow { left: 1.2rem; bottom: 32%; width: clamp(30px, 8vw, 45px); opacity: 0.5; }
-    .d-bar { left: 1.2rem; width: clamp(16px, 4vw, 24px); }
-    .bone-deco { opacity: 0.08; }
-    .bd1 { width: clamp(28px, 7vw, 40px); top: 5%; left: 8%; }
-    .bd2 { width: clamp(24px, 6vw, 35px); top: 12%; right: 5%; }
-    .bd3 { width: clamp(22px, 5.5vw, 32px); bottom: 20%; right: 8%; }
-    .bd4 { width: clamp(20px, 5vw, 30px); bottom: 16%; left: 16%; }
-    .bd5 { width: clamp(18px, 4.5vw, 26px); top: 38%; left: 4%; }
-    .click-hint { font-size: clamp(0.35rem, 1vw, 0.45rem); bottom: 0.8rem; }
-  }
-  @media (max-width: 400px) {
-    .cover-page .center .bone-title { font-size: clamp(3.5rem, 16vw, 5rem); }
-    .cover-page .center .bone-icon { width: clamp(100px, 35vw, 140px); }
-    .cover-page .center .bone-cn { font-size: 0.7rem; }
-    .est { display: none; }
-    .d-yellow, .d-bar { display: none; }
-    .bone-deco { display: none; }
-    .feat { bottom: 1.5rem; left: 1rem; max-width: 80vw; }
-    .feat .ft { font-size: 0.7rem; line-height: 1.4; }
-    .tagline { font-size: 0.4rem; right: 1rem; }
-    .click-hint { font-size: 0.35rem; bottom: 0.5rem; }
-  }
+      .brand-mark {
+        display: grid;
+        width: 48px;
+        height: 48px;
+        place-items: center;
+        border: 4px solid var(--ink);
+        border-radius: 50%;
+        background: var(--gold);
+        box-shadow: 4px 4px 0 var(--ink);
+        font: 30px/1 Luckiest, Impact, sans-serif;
+      }
 
-  /* ============================================ */
-  /* CHAPTER 02 — 骨头集团3.0 · 海街日记              */
-  /* ============================================ */
-  .inner-pages { position: absolute; inset: 0; z-index: 1; overflow: hidden; }
+      .brand-name {
+        font: clamp(28px, 5vw, 54px) / 0.9 Luckiest, Impact, sans-serif;
+        color: var(--navy);
+        text-shadow: 3px 3px 0 var(--red);
+        white-space: nowrap;
+      }
 
-  /* ── Page Slider ── */
-  .pages-slider { display: flex; width: 200%; height: 100%; transition: transform 0.6s cubic-bezier(0.4,0,0.2,1); }
-  .pages-slider.to-page3 { transform: translateX(-50%); }
-  .page-02, .page-03 { flex: 0 0 50%; height: 100%; overflow-y: auto; overflow-x: hidden; }
-  .page-03 { background: #ffffff; }
-  .page-02 { background: #faf8f3; }
+      .nav {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+      }
 
-  /* ── Page Nav Bar ── */
-  .page-nav {
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 1.2vw min(4vw, 64px);
-    font-family: 'Luckiest Guy', cursive;
-    border-bottom: 1px solid rgba(0,0,0,0.08);
-    position: sticky; top: 0; z-index: 5; background: inherit;
-  }
-  .page-nav-bottom {
-    border-top: 1px solid rgba(0,0,0,0.08); border-bottom: none;
-    position: sticky; bottom: 0;
-  }
-  .nav-btn {
-    font-family: 'Luckiest Guy', cursive;
-    font-size: clamp(0.65rem, 2vw, 0.85rem);
-    font-weight: 400;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    color: #d32f2f;
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0.3rem 0;
-    transition: opacity 0.2s;
-  }
-  .nav-btn:hover { opacity: 0.6; }
-  .nav-page-num {
-    font-family: 'Luckiest Guy', cursive;
-    font-size: clamp(0.8rem, 2.5vw, 1.1rem);
-    font-weight: 400;
-    color: #2565ae;
-    letter-spacing: 0.05em;
-  }
+      .nav a,
+      .stamp {
+        border: 3px solid var(--ink);
+        background: var(--white);
+        box-shadow: 4px 4px 0 var(--ink);
+        padding: 9px 13px 8px;
+        transform: rotate(-1deg);
+        font-size: 14px;
+        line-height: 1;
+        text-transform: uppercase;
+      }
 
-  /* ── Page 02: MEET THE CREW ── */
-  .crew-header {
-    text-align: center;
-    padding: min(4vw, 40px) min(4vw, 64px) min(2vw, 20px);
-  }
-  .crew-title {
-    font-family: 'Luckiest Guy', cursive;
-    font-size: clamp(2.5rem, 8vw, 5rem);
-    font-weight: 400;
-    letter-spacing: 0.03em;
-    color: #1e3a3f;
-    line-height: 1;
-  }
-  .crew-sub {
-    font-family: 'Luckiest Guy', cursive;
-    font-size: clamp(1rem, 3vw, 1.6rem);
-    font-weight: 400;
-    color: #c0652c;
-    margin-top: 0.5vw;
-    letter-spacing: 0.05em;
-  }
-  .crew-wobbly {
-    font-family: 'Luckiest Guy', cursive;
-    font-size: clamp(1.4rem, 5vw, 2.4rem);
-    font-weight: 400;
-    color: #d32f2f;
-    margin-top: 0.8vw;
-    display: inline-block;
-  }
-  .crew-wobbly .wobbly-char { display: inline-block; }
+      .nav a:nth-child(2),
+      .stamp {
+        background: var(--red);
+        color: var(--white);
+        transform: rotate(1deg);
+      }
 
-  /* ── Crew Grid ── */
-  .crew-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: min(2vw, 24px);
-    padding: 0 min(4vw, 64px) min(4vw, 40px);
-  }
-  .crew-card {
-    background: #fff;
-    border: 2px solid #111;
-    text-align: center;
-    padding-bottom: min(2vw, 20px);
-  }
-  .crew-card:nth-child(1) { background: #fef9e7; }
-  .crew-card:nth-child(2) { background: #eaf4f0; }
-  .crew-card:nth-child(3) { background: #fce4e4; }
-  .crew-card:nth-child(4) { background: #e8f0fa; }
-  .crew-card:nth-child(5) { background: #f5f0e8; }
-  .crew-card:nth-child(6) { background: #f0e6f6; }
-  .crew-photo {
-    width: 100%;
-    aspect-ratio: 1 / 1;
-    background: rgba(0,0,0,0.03);
-    display: flex; align-items: center; justify-content: center;
-    overflow: hidden;
-  }
-  .crew-photo img {
-    width: 100%; height: 100%;
-    object-fit: cover;
-  }
-  .crew-name {
-    font-family: 'Luckiest Guy', cursive;
-    font-size: clamp(1rem, 3vw, 1.5rem);
-    font-weight: 400;
-    color: #1e3a3f;
-    margin-top: min(1vw, 12px);
-    letter-spacing: 0.03em;
-  }
-  .crew-tag {
-    font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
-    font-size: clamp(0.65rem, 2vw, 0.8rem);
-    font-weight: 600;
-    color: #8b6f50;
-    margin-top: 0.3vw;
-    letter-spacing: 0.05em;
-  }
+      .hero {
+        position: relative;
+        overflow: hidden;
+        border-bottom: 5px solid var(--ink);
+      }
 
-  @media (max-width: 768px) {
-    .crew-grid { grid-template-columns: repeat(2, 1fr); gap: 3vw; }
-    .page-nav { padding: 2vw 4vw; }
-  }
-  @media (max-width: 480px) {
-    .crew-grid { grid-template-columns: 1fr; gap: 4vw; }
-  }
+      .hero-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 0.92fr) minmax(360px, 1.08fr);
+        gap: 34px;
+        align-items: center;
+        min-height: min(720px, calc(100vh - 24px));
+        padding: 44px 0 62px;
+      }
 
-  .chapter02 {
-    width: 100%; min-height: 100vh;
-    background: #ffffff;
-    padding-top: min(5vw, 48px); padding-right: min(4vw, 64px); padding-bottom: min(4vw, 64px); padding-left: min(4vw, 64px);
-    font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
-    color: #1e2a2c;
-    line-height: 1.3;
-  }
+      .hero-copy {
+        position: relative;
+        z-index: 2;
+      }
 
-  .header { margin-bottom: 4vw; border-bottom: 2px solid #111; padding-bottom: 3vw; }
-  .logo-row { display: flex; align-items: baseline; flex-wrap: wrap; column-gap: 1vw; row-gap: 0.5vw; margin-bottom: 0.5vw; }
-  .bone-logo {
-    font-family: 'Luckiest Guy', cursive;
-    font-size: clamp(2.5rem, 8vw, 4.2rem);
-    font-weight: 400;
-    letter-spacing: 0.02em;
-    color: #d32f2f;
-    line-height: 1;
-    text-transform: uppercase;
-  }
-  .bone-sub {
-    font-family: 'Luckiest Guy', cursive;
-    font-size: clamp(0.9rem, 3vw, 1.4rem);
-    font-weight: 400;
-    letter-spacing: 0.02em;
-    color: #1a5c6e;
-    text-transform: uppercase;
-  }
-  .issue-meta {
-    font-size: clamp(0.7rem, 2.5vw, 0.85rem);
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    color: #5a4a3a;
-    margin-top: 0.5vw;
-    margin-bottom: 1vw;
-    display: inline-block;
-  }
-  .bone-boys-group { margin-top: 1vw; }
-  .bone-boys {
-    font-family: 'Luckiest Guy', cursive;
-    font-size: clamp(2rem, 7vw, 3.2rem);
-    font-weight: 400;
-    letter-spacing: 0.01em;
-    color: #1e3a3f;
-    line-height: 1.1;
-    margin-bottom: 0;
-  }
-  .summer-issue {
-    font-family: 'Luckiest Guy', cursive;
-    font-size: clamp(0.9rem, 3vw, 1.3rem);
-    font-weight: 400;
-    letter-spacing: 0.08em;
-    color: #c0652c;
-    line-height: 1.2;
-    margin-bottom: 0.2vw;
-  }
-  .vibe-text {
-    font-family: 'Luckiest Guy', cursive;
-    font-size: clamp(1.1rem, 4vw, 1.8rem);
-    font-weight: 400;
-    color: #2f6b6b;
-    letter-spacing: 0.02em;
-    line-height: 1.2;
-    margin-bottom: 0.5vw;
-  }
-  .hero-wrapper { margin-top: 1.5vw; text-align: left; }
-  .wobbly-line {
-    font-family: 'Luckiest Guy', cursive;
-    font-size: clamp(1.6rem, 6vw, 3rem);
-    font-weight: 400;
-    letter-spacing: clamp(0.2rem, 2vw, 0.5rem);
-    color: #c7451b;
-    display: inline-block;
-    word-break: keep-all;
-  }
-  .wobbly-char { display: inline-block; }
-  .wobbly-char:nth-child(1) { transform: rotate(-4deg); }
-  .wobbly-char:nth-child(2) { transform: rotate(3.5deg); }
-  .wobbly-char:nth-child(3) { transform: rotate(-2.5deg); }
-  .wobbly-char:nth-child(4) { transform: rotate(4.2deg); }
-  .wobbly-char:nth-child(5) { transform: rotate(-3deg); }
-  .wobbly-char:nth-child(6) { transform: rotate(2deg); }
-  .wobbly-char:nth-child(7) { transform: rotate(-3.8deg); }
-  .wobbly-char:nth-child(8) { transform: rotate(2.8deg); }
-  .wobbly-char:nth-child(9) { transform: rotate(-2deg); }
-  .wobbly-char:nth-child(10) { transform: rotate(4.5deg); }
-  .wobbly-char:nth-child(11) { transform: rotate(-3.2deg); }
-  .wobbly-char:nth-child(12) { transform: rotate(1.8deg); }
-  .wobbly-char:nth-child(13) { transform: rotate(-4.5deg); }
-  .wobbly-char:nth-child(14) { transform: rotate(3deg); }
+      .eyebrow {
+        display: inline-block;
+        margin-bottom: 16px;
+        border: 3px solid var(--ink);
+        background: var(--spinach);
+        color: var(--white);
+        box-shadow: 5px 5px 0 var(--ink);
+        padding: 8px 12px 7px;
+        font-size: 13px;
+        text-transform: uppercase;
+        transform: rotate(-2deg);
+      }
 
-  /* ── Photo Grid ── */
-  .photo-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5vw; margin: 3vw 0; }
-  .photo-frame {
-    width: 100%;
-    aspect-ratio: 3 / 4;
-    background-color: #e0d8cc;
-    position: relative;
-    overflow: hidden;
-    border: 2px solid #111;
-  }
-  .photo-frame img { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .photo-index {
-    position: absolute;
-    bottom: 8px;
-    right: 8px;
-    font-family: 'Luckiest Guy', cursive;
-    font-size: clamp(0.7rem, 2vw, 0.9rem);
-    font-weight: 400;
-    color: #fff;
-    background: #d32f2f;
-    padding: 0.1rem 0.6rem;
-  }
-  .photo-card:nth-child(1) .photo-frame { background: #c7bc9f; }
-  .photo-card:nth-child(2) .photo-frame { background: #b9cbcc; }
-  .photo-card:nth-child(3) .photo-frame { background: #dfcbad; }
-  .photo-card:nth-child(4) .photo-frame { background: #c3b1a2; }
-  .photo-card:nth-child(5) .photo-frame { background: #bed3d0; }
-  .photo-card:nth-child(6) .photo-frame { background: #e2cfaf; }
+      h1,
+      h2,
+      h3,
+      p {
+        margin: 0;
+      }
 
-  /* ── OCEAN DAYS ── */
-  .ocean-section { margin: 2vw 0; border-top: 2px solid #111; padding-top: 2vw; }
-  .ocean-title {
-    font-family: 'Luckiest Guy', cursive;
-    font-size: clamp(2rem, 8vw, 4rem);
-    font-weight: 400;
-    letter-spacing: 0.02em;
-    color: #1f5e63;
-    margin-bottom: 1vw;
-  }
-  .ocean-sub { font-size: clamp(0.9rem, 3vw, 1.2rem); font-weight: 800; color: #3a5e5e; margin-bottom: 0.5vw; }
-  .ocean-sub span { margin-right: 1.5vw; }
-  .extra-line {
-    margin-top: 0.8vw;
-    font-size: clamp(0.8rem, 2.5vw, 1rem);
-    font-weight: 700;
-    color: #b5651e;
-    border-left: 3px solid #ffaa44;
-    padding-left: 0.8rem;
-  }
+      h1 {
+        max-width: 8ch;
+        font: clamp(76px, 14vw, 172px) / 0.78 Luckiest, Impact, sans-serif;
+        color: var(--red);
+        text-shadow:
+          4px 4px 0 var(--white),
+          9px 9px 0 var(--ink);
+      }
 
-  /* ── Bottom ── */
-  .bottom-nav { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; margin: 2vw 0 1vw 0; padding-top: 0.5vw; }
-  .back-cover {
-    font-family: 'Luckiest Guy', cursive;
-    font-size: clamp(0.8rem, 3vw, 1.1rem);
-    font-weight: 400;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    color: #d32f2f;
-    background: none;
-    border: none;
-    cursor: pointer;
-  }
-  .back-cover:hover { opacity: 0.7; }
-  .mag-links { display: flex; gap: 3vw; }
-  .mag-link { font-size: clamp(0.7rem, 2.5vw, 0.85rem); font-weight: 700; letter-spacing: 1px; color: #5a4a3a; }
-  .simple-row { display: flex; justify-content: space-between; flex-wrap: wrap; margin: 1vw 0; font-size: clamp(0.7rem, 2.5vw, 0.85rem); font-weight: 600; color: #5a5a4a; border-top: 1px solid #e0d8cc; padding-top: 1vw; }
-  .city-tag-row { display: flex; flex-wrap: wrap; gap: 2vw; margin: 1vw 0 0.8vw 0; }
-  .city-tag { font-size: clamp(0.6rem, 2vw, 0.75rem); font-weight: 700; letter-spacing: 1px; color: #c0652c; }
-  .beach-club-line { font-size: clamp(0.65rem, 2.2vw, 0.8rem); font-weight: 700; letter-spacing: 1px; color: #8b6f50; margin: 0.5vw 0; }
-  .taiwan-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 1vw; font-size: clamp(0.6rem, 2vw, 0.75rem); font-weight: 700; color: #5a4a3a; border-top: 1px solid #e0d8cc; padding-top: 1vw; }
+      .deck {
+        max-width: 640px;
+        margin-top: 28px;
+        font: 900 clamp(19px, 2.6vw, 31px) / 1.08 Arial, system-ui, sans-serif;
+        color: var(--navy);
+      }
 
-  @media (max-width: 768px) { .photo-grid { gap: 2vw; } }
-  @media (max-width: 480px) { .chapter02 { padding: 4vw; } .photo-grid { gap: 3vw; } }
-</style>
-</head>
-<body>
+      .hero-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 14px;
+        margin-top: 28px;
+      }
 
-<div class="magazine">
+      .button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 48px;
+        border: 4px solid var(--ink);
+        background: var(--gold);
+        box-shadow: var(--shadow);
+        padding: 12px 18px 10px;
+        font-size: 16px;
+        text-transform: uppercase;
+      }
 
-  <!-- COVER PAGE -->
-  <div class="cover-page" id="coverPage">
-    <div class="cover-inner">
+      .button.secondary {
+        background: var(--white);
+      }
 
-      <div class="vol">VOL.01 &mdash; 2026</div>
-      <div class="tagline">MAGAZINE FOR CITY BOYS</div>
+      .hero-photo-wrap {
+        position: relative;
+        z-index: 1;
+      }
 
-      <div class="est"><div class="l1">EST.</div><div class="l2">High School<br>Forever</div></div>
+      .hero-photo {
+        aspect-ratio: 4 / 5;
+        overflow: hidden;
+        border: 7px solid var(--ink);
+        background: var(--white);
+        box-shadow: 14px 14px 0 var(--ink);
+        transform: rotate(2deg);
+      }
 
-      <div class="d-yellow">
-        <svg viewBox="0 0 500 200" fill="none"><ellipse cx="50" cy="100" rx="46" ry="52" fill="#2565ae" stroke="#1a2d4a" stroke-width="9"/><ellipse cx="450" cy="100" rx="46" ry="52" fill="#2565ae" stroke="#1a2d4a" stroke-width="9"/><rect x="50" y="68" width="400" height="64" rx="22" fill="#2565ae" stroke="#1a2d4a" stroke-width="8"/></svg>
+      .hero-photo img {
+        filter: saturate(1.08) contrast(1.06);
+      }
+
+      .photo-caption {
+        position: absolute;
+        right: 16px;
+        bottom: -18px;
+        border: 4px solid var(--ink);
+        background: var(--red);
+        color: var(--white);
+        box-shadow: 6px 6px 0 var(--ink);
+        padding: 10px 14px 9px;
+        font-size: 16px;
+        text-transform: uppercase;
+        transform: rotate(-3deg);
+      }
+
+      .waves {
+        position: absolute;
+        right: -70px;
+        bottom: -58px;
+        left: -70px;
+        height: 130px;
+        border-top: 5px solid var(--ink);
+        background:
+          radial-gradient(44px 34px at 44px 0, transparent 42px, var(--ink) 43px, var(--ink) 47px, transparent 48px) 0 0 / 88px 64px,
+          linear-gradient(var(--sea), var(--sea));
+        opacity: 0.95;
+      }
+
+      section {
+        padding: 72px 0;
+      }
+
+      .section-head {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 24px;
+        margin-bottom: 28px;
+        border-bottom: 5px solid var(--ink);
+        padding-bottom: 18px;
+      }
+
+      h2 {
+        font: clamp(42px, 7vw, 86px) / 0.86 Luckiest, Impact, sans-serif;
+        color: var(--navy);
+        text-shadow: 4px 4px 0 var(--gold);
+        text-transform: uppercase;
+      }
+
+      .section-note {
+        max-width: 480px;
+        font: 900 18px/1.2 Arial, system-ui, sans-serif;
+        color: var(--spinach);
+        text-align: right;
+      }
+
+      .crew-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 22px;
+      }
+
+      .card {
+        position: relative;
+        overflow: hidden;
+        border: 5px solid var(--ink);
+        background: var(--white);
+        box-shadow: 8px 8px 0 var(--ink);
+      }
+
+      .card:nth-child(2n) {
+        transform: rotate(1deg);
+      }
+
+      .card:nth-child(2n + 1) {
+        transform: rotate(-1deg);
+      }
+
+      .portrait {
+        aspect-ratio: 1 / 1;
+        border-bottom: 5px solid var(--ink);
+        background: var(--paper-dark);
+      }
+
+      .portrait img {
+        image-rendering: auto;
+      }
+
+      .card-body {
+        min-height: 150px;
+        padding: 18px;
+      }
+
+      h3 {
+        font: clamp(24px, 3vw, 36px) / 0.9 Luckiest, Impact, sans-serif;
+        color: var(--red);
+        text-shadow: 2px 2px 0 var(--gold);
+        text-transform: uppercase;
+      }
+
+      .tag {
+        display: inline-block;
+        margin-top: 12px;
+        border: 3px solid var(--ink);
+        background: var(--navy);
+        color: var(--white);
+        padding: 7px 10px 6px;
+        font-size: 12px;
+        text-transform: uppercase;
+      }
+
+      .gallery {
+        background:
+          linear-gradient(135deg, rgba(217, 72, 49, 0.12) 25%, transparent 25%) 0 0 / 32px 32px,
+          var(--paper-dark);
+        border-top: 5px solid var(--ink);
+        border-bottom: 5px solid var(--ink);
+      }
+
+      .photo-grid {
+        display: grid;
+        grid-template-columns: 1.2fr 0.8fr 0.8fr;
+        grid-auto-rows: 260px;
+        gap: 18px;
+      }
+
+      .snap {
+        overflow: hidden;
+        border: 5px solid var(--ink);
+        background: var(--white);
+        box-shadow: 7px 7px 0 var(--ink);
+      }
+
+      .snap:first-child {
+        grid-row: span 2;
+      }
+
+      .snap:nth-child(3),
+      .snap:nth-child(6) {
+        transform: rotate(1.2deg);
+      }
+
+      .snap:nth-child(2),
+      .snap:nth-child(5) {
+        transform: rotate(-1.2deg);
+      }
+
+      .origin-grid {
+        display: grid;
+        grid-template-columns: 0.82fr 1.18fr;
+        gap: 28px;
+        align-items: stretch;
+      }
+
+      .poster {
+        display: grid;
+        min-height: 360px;
+        place-items: center;
+        border: 6px solid var(--ink);
+        background:
+          radial-gradient(circle at 50% 44%, var(--gold) 0 18%, transparent 19%),
+          repeating-linear-gradient(90deg, var(--navy) 0 18px, var(--sea) 18px 36px);
+        box-shadow: 10px 10px 0 var(--ink);
+        color: var(--white);
+        text-align: center;
+      }
+
+      .poster strong {
+        font: clamp(58px, 9vw, 106px) / 0.75 Luckiest, Impact, sans-serif;
+        text-shadow: 5px 5px 0 var(--ink);
+      }
+
+      .manifesto {
+        border: 5px solid var(--ink);
+        background: var(--white);
+        box-shadow: 8px 8px 0 var(--ink);
+        padding: clamp(24px, 5vw, 46px);
+      }
+
+      .manifesto p {
+        font: 900 clamp(22px, 3.4vw, 40px) / 1.05 Arial, system-ui, sans-serif;
+        color: var(--navy);
+      }
+
+      .manifesto .small {
+        margin-top: 22px;
+        font-size: clamp(16px, 2vw, 22px);
+        line-height: 1.25;
+        color: var(--ink);
+      }
+
+      .ticker {
+        overflow: hidden;
+        border-top: 5px solid var(--ink);
+        border-bottom: 5px solid var(--ink);
+        background: var(--red);
+        color: var(--white);
+      }
+
+      .ticker-track {
+        display: flex;
+        width: max-content;
+        animation: roll 22s linear infinite;
+      }
+
+      .ticker span {
+        padding: 15px 18px 13px;
+        font: 24px/1 Luckiest, Impact, sans-serif;
+        text-transform: uppercase;
+        white-space: nowrap;
+      }
+
+      footer {
+        padding: 34px 0 42px;
+        background: var(--navy);
+        color: var(--white);
+        border-top: 5px solid var(--ink);
+      }
+
+      .footer-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 18px;
+        flex-wrap: wrap;
+      }
+
+      .footer-inner strong {
+        font: 36px/0.9 Luckiest, Impact, sans-serif;
+        color: var(--gold);
+        text-shadow: 3px 3px 0 var(--ink);
+      }
+
+      .footer-inner span {
+        font-size: 14px;
+        text-transform: uppercase;
+      }
+
+      @keyframes roll {
+        from {
+          transform: translateX(0);
+        }
+
+        to {
+          transform: translateX(-50%);
+        }
+      }
+
+      @media (max-width: 880px) {
+        .topbar-inner {
+          align-items: flex-start;
+          flex-direction: column;
+          padding: 14px 0;
+        }
+
+        .hero-grid,
+        .origin-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .hero-grid {
+          min-height: auto;
+          padding-top: 36px;
+        }
+
+        .hero-photo {
+          aspect-ratio: 5 / 4;
+        }
+
+        .crew-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .photo-grid {
+          grid-template-columns: 1fr 1fr;
+          grid-auto-rows: 220px;
+        }
+
+        .section-head {
+          align-items: flex-start;
+          flex-direction: column;
+        }
+
+        .section-note {
+          text-align: left;
+        }
+      }
+
+      @media (max-width: 560px) {
+        .shell {
+          width: min(100% - 22px, 1180px);
+        }
+
+        .brand-name {
+          font-size: 38px;
+        }
+
+        .brand-mark {
+          width: 42px;
+          height: 42px;
+          font-size: 26px;
+        }
+
+        .nav {
+          width: 100%;
+          justify-content: flex-start;
+        }
+
+        .nav a {
+          flex: 1 1 auto;
+          min-width: 92px;
+          text-align: center;
+        }
+
+        h1 {
+          font-size: clamp(64px, 25vw, 116px);
+        }
+
+        .deck {
+          font-size: 20px;
+        }
+
+        .hero-photo {
+          border-width: 5px;
+          box-shadow: 8px 8px 0 var(--ink);
+        }
+
+        .photo-caption {
+          right: 8px;
+          bottom: -14px;
+          max-width: calc(100% - 16px);
+          font-size: 13px;
+        }
+
+        section {
+          padding: 54px 0;
+        }
+
+        .crew-grid,
+        .photo-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .photo-grid {
+          grid-auto-rows: 260px;
+        }
+
+        .snap:first-child {
+          grid-row: span 1;
+        }
+
+        .card {
+          transform: none !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="shell topbar-inner">
+        <a class="brand" href="#top" aria-label="BONE home">
+          <span class="brand-mark">B</span>
+          <span class="brand-name">BONE</span>
+        </a>
+        <nav class="nav" aria-label="Main navigation">
+          <a href="#crew">Crew</a>
+          <a href="#gallery">Gallery</a>
+          <a href="#origin">Origin</a>
+        </nav>
       </div>
-      <div class="d-bar"></div>
+    </header>
 
-      <div class="bone-deco bd1"><svg viewBox="0 0 500 200" fill="none"><ellipse cx="50" cy="100" rx="46" ry="52" fill="#2565ae" stroke="#1a2d4a" stroke-width="9"/><ellipse cx="450" cy="100" rx="46" ry="52" fill="#2565ae" stroke="#1a2d4a" stroke-width="9"/><rect x="50" y="68" width="400" height="64" rx="22" fill="#2565ae" stroke="#1a2d4a" stroke-width="8"/></svg></div>
-      <div class="bone-deco bd2"><svg viewBox="0 0 500 200" fill="none"><ellipse cx="50" cy="100" rx="46" ry="52" fill="#2565ae" stroke="#1a2d4a" stroke-width="9"/><ellipse cx="450" cy="100" rx="46" ry="52" fill="#2565ae" stroke="#1a2d4a" stroke-width="9"/><rect x="50" y="68" width="400" height="64" rx="22" fill="#2565ae" stroke="#1a2d4a" stroke-width="8"/></svg></div>
-      <div class="bone-deco bd3"><svg viewBox="0 0 500 200" fill="none"><ellipse cx="50" cy="100" rx="46" ry="52" fill="#2565ae" stroke="#1a2d4a" stroke-width="9"/><ellipse cx="450" cy="100" rx="46" ry="52" fill="#2565ae" stroke="#1a2d4a" stroke-width="9"/><rect x="50" y="68" width="400" height="64" rx="22" fill="#2565ae" stroke="#1a2d4a" stroke-width="8"/></svg></div>
-      <div class="bone-deco bd4"><svg viewBox="0 0 500 200" fill="none"><ellipse cx="50" cy="100" rx="46" ry="52" fill="#2565ae" stroke="#1a2d4a" stroke-width="9"/><ellipse cx="450" cy="100" rx="46" ry="52" fill="#2565ae" stroke="#1a2d4a" stroke-width="9"/><rect x="50" y="68" width="400" height="64" rx="22" fill="#2565ae" stroke="#1a2d4a" stroke-width="8"/></svg></div>
-      <div class="bone-deco bd5"><svg viewBox="0 0 500 200" fill="none"><ellipse cx="50" cy="100" rx="46" ry="52" fill="#2565ae" stroke="#1a2d4a" stroke-width="9"/><ellipse cx="450" cy="100" rx="46" ry="52" fill="#2565ae" stroke="#1a2d4a" stroke-width="9"/><rect x="50" y="68" width="400" height="64" rx="22" fill="#2565ae" stroke="#1a2d4a" stroke-width="8"/></svg></div>
-
-      <div class="center">
-        <div class="bone-title">BONE</div>
-        <div class="bone-icon" id="boneLogo" title="Open magazine">
-          <svg viewBox="0 0 500 200" fill="none"><ellipse cx="50" cy="100" rx="46" ry="52" fill="#2565ae" stroke="#1a2d4a" stroke-width="9"/><ellipse cx="450" cy="100" rx="46" ry="52" fill="#2565ae" stroke="#1a2d4a" stroke-width="9"/><rect x="50" y="68" width="400" height="64" rx="22" fill="#2565ae" stroke="#1a2d4a" stroke-width="8"/></svg>
-        </div>
-        <div class="bone-cn">骨 头 集 团</div>
-      </div>
-
-      <div class="feat"><div class="fl">FEATURE</div><div class="ft">This is a team of six fucking people formed in high school. Each person has a different personality and a distinct character.</div></div>
-
-      <div class="click-hint">Click the bone to open</div>
-    </div>
-  </div>
-
-  <!-- INNER PAGES -->
-  <div class="inner-pages" id="innerPages">
-    <div class="pages-slider" id="pagesSlider">
-
-      <!-- PAGE 02 — MEET THE CREW -->
-      <div class="page-02" id="page02">
-        <div class="page-nav">
-          <button class="nav-btn" onclick="closeCover()">&larr; BACK TO COVER</button>
-          <span class="nav-page-num">02</span>
-          <button class="nav-btn" onclick="goToPage3()">NEXT &rarr;</button>
-        </div>
-
-        <div class="crew-header">
-          <div class="crew-title">MEET THE CREW</div>
-          <div class="crew-sub">THE SIX BEHIND THE BONE</div>
-          <div class="crew-wobbly">
-            <span class="wobbly-char">骨</span><span class="wobbly-char">头</span><span class="wobbly-char">少</span><span class="wobbly-char">年</span>
+    <main id="top">
+      <section class="hero">
+        <div class="shell hero-grid">
+          <div class="hero-copy">
+            <span class="eyebrow">Private crew log</span>
+            <h1>BONE CREW</h1>
+            <p class="deck">Six people, one strange little archive, and enough seaside chaos to deserve its own newspaper.</p>
+            <div class="hero-actions">
+              <a class="button" href="#crew">Meet the six</a>
+              <a class="button secondary" href="#gallery">Open the roll</a>
+            </div>
+          </div>
+          <div class="hero-photo-wrap">
+            <div class="hero-photo">
+              <img src="team-1.jpg" alt="BONE crew together by the coast" />
+            </div>
+            <div class="photo-caption">Filed from the dock</div>
           </div>
         </div>
+        <div class="waves" aria-hidden="true"></div>
+      </section>
 
+      <section id="crew" class="shell">
+        <div class="section-head">
+          <h2>The Six</h2>
+          <p class="section-note">A loud little crew page, built around the photos instead of pretending this is a corporate profile.</p>
+        </div>
         <div class="crew-grid">
-          <div class="crew-card">
-            <div class="crew-photo"><img src="crew/Mneur%20Chan.jpg" alt=""></div>
-            <div class="crew-name">Mneur Chan</div>
-            <div class="crew-tag">BATMAN</div>
-          </div>
-          <div class="crew-card">
-            <div class="crew-photo"><img src="crew/bone%20沈柴.png" alt=""></div>
-            <div class="crew-name">bone 沈柴</div>
-            <div class="crew-tag">火柴人</div>
-          </div>
-          <div class="crew-card">
-            <div class="crew-photo"><img src="crew/insane%20Cheung.png" alt=""></div>
-            <div class="crew-name">insane Cheung</div>
-            <div class="crew-tag">癫狂的人</div>
-          </div>
-          <div class="crew-card">
-            <div class="crew-photo"><img src="crew/ass%20裴.jpg" alt=""></div>
-            <div class="crew-name">ass 裴</div>
-            <div class="crew-tag">BITCH ASS</div>
-          </div>
-          <div class="crew-card">
-            <div class="crew-photo"><img src="crew/poison%20gen.png" alt=""></div>
-            <div class="crew-name">poison gen</div>
-            <div class="crew-tag">TOXIC</div>
-          </div>
-          <div class="crew-card">
-            <div class="crew-photo"><img src="crew/liar%20鸿.png" alt=""></div>
-            <div class="crew-name">liar 鸿</div>
-            <div class="crew-tag">FUCKING LIAR</div>
-          </div>
+          <article class="card">
+            <div class="portrait"><img src="crew/Mneur%20Chan.jpg" alt="Mneur Chan" /></div>
+            <div class="card-body">
+              <h3>Mneur Chan</h3>
+              <span class="tag">Captain of the file</span>
+            </div>
+          </article>
+          <article class="card">
+            <div class="portrait"><img src="crew/bone%20沈柴.png" alt="Bone Shen" /></div>
+            <div class="card-body">
+              <h3>Bone Shen</h3>
+              <span class="tag">Signal keeper</span>
+            </div>
+          </article>
+          <article class="card">
+            <div class="portrait"><img src="crew/insane%20Cheung.png" alt="Insane Cheung" /></div>
+            <div class="card-body">
+              <h3>Insane Cheung</h3>
+              <span class="tag">Weather maker</span>
+            </div>
+          </article>
+          <article class="card">
+            <div class="portrait"><img src="crew/ass%20裴.jpg" alt="Ass Pei" /></div>
+            <div class="card-body">
+              <h3>Ass Pei</h3>
+              <span class="tag">Deck energy</span>
+            </div>
+          </article>
+          <article class="card">
+            <div class="portrait"><img src="crew/poison%20gen.png" alt="Poison Gen" /></div>
+            <div class="card-body">
+              <h3>Poison Gen</h3>
+              <span class="tag">Spicy compass</span>
+            </div>
+          </article>
+          <article class="card">
+            <div class="portrait"><img src="crew/liar%20鸿.png" alt="Liar Hong" /></div>
+            <div class="card-body">
+              <h3>Liar Hong</h3>
+              <span class="tag">Rumor engine</span>
+            </div>
+          </article>
         </div>
+      </section>
 
-        <div class="page-nav page-nav-bottom">
-          <button class="nav-btn" onclick="closeCover()">&larr; BACK TO COVER</button>
-          <span class="nav-page-num">02</span>
-          <button class="nav-btn" onclick="goToPage3()">NEXT &rarr;</button>
+      <div class="ticker" aria-hidden="true">
+        <div class="ticker-track">
+          <span>BONE aboard</span><span>Six names</span><span>One roll</span><span>Sea ink</span><span>Private log</span><span>No boring page</span>
+          <span>BONE aboard</span><span>Six names</span><span>One roll</span><span>Sea ink</span><span>Private log</span><span>No boring page</span>
         </div>
       </div>
 
-      <!-- PAGE 03 — 骨头集团3.0 · 海街日记 -->
-      <div class="page-03" id="page03">
-        <div class="page-nav">
-          <button class="nav-btn" onclick="goToPage2()">&larr; PREV</button>
-          <span class="nav-page-num">03</span>
-          <button class="nav-btn" onclick="closeCover()">BACK TO COVER &rarr;</button>
-        </div>
-
-        <div class="chapter02">
-
-          <div class="header">
-            <div class="logo-row">
-              <div class="bone-logo">BONE</div>
-              <div class="bone-sub">骨头集团</div>
-            </div>
-            <div class="issue-meta">ISSUE 01 — WINTER 2026 — VOL. 01</div>
-            <div class="bone-boys-group">
-              <div class="bone-boys">BONE BOYS</div>
-              <div class="summer-issue">WINTER ISSUE</div>
-              <div class="vibe-text">GOOD VIBES AND COLD WAVES.</div>
-            </div>
-            <div class="hero-wrapper">
-              <div class="wobbly-line">
-                <span class="wobbly-char">骨</span><span class="wobbly-char">头</span><span class="wobbly-char">集</span><span class="wobbly-char">团</span><span class="wobbly-char">3</span><span class="wobbly-char">.</span><span class="wobbly-char">0</span><span class="wobbly-char"> </span><span class="wobbly-char">·</span><span class="wobbly-char"> </span><span class="wobbly-char">海</span><span class="wobbly-char">街</span><span class="wobbly-char">日</span><span class="wobbly-char">记</span>
-              </div>
-            </div>
+      <section id="gallery" class="gallery">
+        <div class="shell">
+          <div class="section-head">
+            <h2>Photo Roll</h2>
+            <p class="section-note">The site should feel like a saved memory, not a pitch deck.</p>
           </div>
-
           <div class="photo-grid">
-            <div class="photo-card"><div class="photo-frame"><img src="team-1.jpg" alt=""><div class="photo-index">PHOTO-01</div></div></div>
-            <div class="photo-card"><div class="photo-frame"><img src="team-3.jpg" alt=""><div class="photo-index">PHOTO-02</div></div></div>
-            <div class="photo-card"><div class="photo-frame"><img src="team-4.jpg" alt=""><div class="photo-index">PHOTO-03</div></div></div>
-            <div class="photo-card"><div class="photo-frame"><img src="team-5.jpg" alt=""><div class="photo-index">PHOTO-04</div></div></div>
-            <div class="photo-card"><div class="photo-frame"><img src="team-6.jpg" alt=""><div class="photo-index">PHOTO-05</div></div></div>
-            <div class="photo-card"><div class="photo-frame"><img src="team-f.jpg" alt=""><div class="photo-index">PHOTO-06</div></div></div>
+            <figure class="snap"><img src="team-f.jpg" alt="BONE group photo" /></figure>
+            <figure class="snap"><img src="team-3.jpg" alt="BONE group photo" /></figure>
+            <figure class="snap"><img src="team-4.jpg" alt="BONE group photo" /></figure>
+            <figure class="snap"><img src="team-5.jpg" alt="BONE group photo" /></figure>
+            <figure class="snap"><img src="team-6.jpg" alt="BONE group photo" /></figure>
+            <figure class="snap"><img src="team-1.jpg" alt="BONE group photo" /></figure>
           </div>
-
-          <div class="ocean-section">
-            <div class="ocean-title">OCEAN DAYS</div>
-            <div class="ocean-sub">
-              <span>Six boys.</span>
-              <span>One bone.</span>
-              <span>Winter shores.</span>
-            </div>
-            <div class="extra-line">Winter shores : 海岸线记忆</div>
-          </div>
-
-          <div class="bottom-nav">
-            <button class="back-cover" onclick="closeCover()">&larr; BACK TO COVER</button>
-            <div class="mag-links">
-              <span class="mag-link">BONE MAGAZINE</span>
-              <span class="mag-link">WINTER ARCHIVE</span>
-            </div>
-          </div>
-
-          <div class="simple-row">
-            <span>BONEMAGAZINE</span>
-            <span>Keeping it simple. Keeping it real.</span>
-          </div>
-
-          <div class="city-tag-row">
-            <span class="city-tag">COASTAL CITY BOYS</span>
-            <span class="city-tag">BEACHSIDE MEMORIES</span>
-            <span class="city-tag">SEA BREEZE COLLECTION</span>
-          </div>
-
-          <div class="beach-club-line">BONE BEACH CLUB — CITY BOYS ON THE COAST</div>
-
-          <div class="taiwan-footer">
-            <span>CHINA MAOMING 2026 WINTER</span>
-            <span>03</span>
-          </div>
-
         </div>
+      </section>
+
+      <section id="origin" class="shell">
+        <div class="origin-grid">
+          <div class="poster" aria-label="BONE poster mark">
+            <strong>BONE<br />CREW</strong>
+          </div>
+          <div class="manifesto">
+            <p>Not polished. Not quiet. Just a small crew page with real photos, thick ink, and the kind of private jokes that only make sense inside the group.</p>
+            <p class="small">The visual rule: old sailor comic energy, but using your own photos as the subject. Big type, rough borders, newspaper paper, red-blue-green contrast, and no copied character art.</p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="shell footer-inner">
+        <strong>BONE</strong>
+        <span>Internal archive / built for the crew</span>
       </div>
-
-    </div>
-  </div>
-
-</div>
-
-<script>
-  const coverPage = document.getElementById('coverPage');
-  const pagesSlider = document.getElementById('pagesSlider');
-  const page02 = document.getElementById('page02');
-  const page03 = document.getElementById('page03');
-
-  document.getElementById('boneLogo').addEventListener('click', () => {
-    coverPage.classList.add('open');
-  });
-
-  function goToPage3() {
-    pagesSlider.classList.add('to-page3');
-    page03.scrollTop = 0;
-  }
-  function goToPage2() {
-    pagesSlider.classList.remove('to-page3');
-    page02.scrollTop = 0;
-  }
-  function closeCover() {
-    coverPage.classList.remove('open');
-    pagesSlider.classList.remove('to-page3');
-    page02.scrollTop = 0;
-    page03.scrollTop = 0;
-  }
-</script>
-
-</body>
+    </footer>
+  </body>
 </html>
