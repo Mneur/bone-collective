@@ -1,16 +1,888 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta http-equiv="refresh" content="0; url=./" />
-    <link rel="canonical" href="./" />
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>BONE Collective</title>
+    <style>
+      @font-face {
+        font-family: "Luckiest";
+        src: url("fonts/LuckiestGuy.ttf") format("truetype");
+        font-display: swap;
+      }
+
+      :root {
+        --paper: #f6ecd0;
+        --paper-dark: #e7d7ab;
+        --ink: #15120d;
+        --navy: #173b55;
+        --sea: #2d7890;
+        --red: #d94831;
+        --spinach: #477c52;
+        --gold: #efc54e;
+        --white: #fffaf0;
+        --shadow: 8px 8px 0 var(--ink);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        color: var(--ink);
+        background:
+          linear-gradient(90deg, rgba(21, 18, 13, 0.035) 1px, transparent 1px),
+          linear-gradient(rgba(21, 18, 13, 0.025) 1px, transparent 1px),
+          var(--paper);
+        background-size: 22px 22px;
+        font-family: "Arial Black", Impact, system-ui, sans-serif;
+        letter-spacing: 0;
+      }
+
+      img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      .shell {
+        width: min(1180px, calc(100% - 32px));
+        margin: 0 auto;
+      }
+
+      .topbar {
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        border-bottom: 4px solid var(--ink);
+        background: rgba(246, 236, 208, 0.92);
+        backdrop-filter: blur(10px);
+      }
+
+      .topbar-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 18px;
+        min-height: 72px;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        min-width: 0;
+      }
+
+      .brand-mark {
+        display: grid;
+        width: 48px;
+        height: 48px;
+        place-items: center;
+        border: 4px solid var(--ink);
+        border-radius: 50%;
+        background: var(--gold);
+        box-shadow: 4px 4px 0 var(--ink);
+      }
+      .brand-mark svg {
+        width: 34px;
+        height: 34px;
+        display: block;
+      }
+
+      .brand-name {
+        font: clamp(28px, 5vw, 54px) / 0.9 Luckiest, Impact, sans-serif;
+        color: var(--navy);
+        text-shadow: 3px 3px 0 var(--red);
+        white-space: nowrap;
+      }
+
+      .nav {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+      }
+
+      .nav a,
+      .stamp {
+        border: 3px solid var(--ink);
+        background: var(--white);
+        box-shadow: 4px 4px 0 var(--ink);
+        padding: 9px 13px 8px;
+        transform: rotate(-1deg);
+        font-size: 14px;
+        line-height: 1;
+        text-transform: uppercase;
+      }
+
+      .nav a:nth-child(2),
+      .stamp {
+        background: var(--red);
+        color: var(--white);
+        transform: rotate(1deg);
+      }
+
+      .hero {
+        position: relative;
+        overflow: hidden;
+        border-bottom: 5px solid var(--ink);
+      }
+
+      .hero-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 0.92fr) minmax(360px, 1.08fr);
+        gap: 34px;
+        align-items: center;
+        min-height: min(720px, calc(100vh - 24px));
+        padding: 44px 0 62px;
+      }
+
+      .hero-copy {
+        position: relative;
+        z-index: 2;
+      }
+
+      .eyebrow {
+        display: inline-block;
+        margin-bottom: 16px;
+        border: 3px solid var(--ink);
+        background: var(--spinach);
+        color: var(--white);
+        box-shadow: 5px 5px 0 var(--ink);
+        padding: 8px 12px 7px;
+        font-size: 13px;
+        text-transform: uppercase;
+        transform: rotate(-2deg);
+      }
+
+      h1,
+      h2,
+      h3,
+      p {
+        margin: 0;
+      }
+
+      h1 {
+        max-width: 8ch;
+        font: clamp(76px, 14vw, 172px) / 0.9 Luckiest, Impact, sans-serif;
+        color: var(--red);
+        text-shadow:
+          4px 4px 0 var(--white),
+          9px 9px 0 var(--ink);
+      }
+
+      .deck {
+        max-width: 640px;
+        margin-top: 28px;
+        font: 900 clamp(19px, 2.6vw, 31px) / 1.08 Arial, system-ui, sans-serif;
+        color: var(--navy);
+      }
+
+      .hero-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 14px;
+        margin-top: 28px;
+      }
+
+      .button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 48px;
+        border: 4px solid var(--ink);
+        background: var(--gold);
+        box-shadow: var(--shadow);
+        padding: 12px 18px 10px;
+        font-size: 16px;
+        text-transform: uppercase;
+      }
+
+      .button.secondary {
+        background: var(--white);
+      }
+
+      .hero-photo-wrap {
+        position: relative;
+        z-index: 1;
+      }
+
+      .hero-photo {
+        aspect-ratio: 4 / 5;
+        overflow: hidden;
+        border: 7px solid var(--ink);
+        background: var(--white);
+        box-shadow: 14px 14px 0 var(--ink);
+        transform: rotate(2deg);
+      }
+
+      .hero-photo img {
+        filter: saturate(1.08) contrast(1.06);
+      }
+
+      .photo-caption {
+        position: absolute;
+        right: 16px;
+        bottom: -18px;
+        border: 4px solid var(--ink);
+        background: var(--red);
+        color: var(--white);
+        box-shadow: 6px 6px 0 var(--ink);
+        padding: 10px 14px 9px;
+        font-size: 16px;
+        text-transform: uppercase;
+        transform: rotate(-3deg);
+      }
+
+      .waves {
+        position: absolute;
+        right: -70px;
+        bottom: -58px;
+        left: -70px;
+        height: 130px;
+        border-top: 5px solid var(--ink);
+        background:
+          radial-gradient(44px 34px at 44px 0, transparent 42px, var(--ink) 43px, var(--ink) 47px, transparent 48px) 0 0 / 88px 64px,
+          linear-gradient(var(--sea), var(--sea));
+        opacity: 0.95;
+      }
+
+      section {
+        padding: 72px 0;
+      }
+
+      .section-head {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 24px;
+        margin-bottom: 28px;
+        border-bottom: 5px solid var(--ink);
+        padding-bottom: 18px;
+      }
+
+      h2 {
+        font: clamp(42px, 7vw, 86px) / 0.86 Luckiest, Impact, sans-serif;
+        color: var(--navy);
+        text-shadow: 4px 4px 0 var(--gold);
+        text-transform: uppercase;
+      }
+
+      .section-note {
+        max-width: 480px;
+        font: 900 18px/1.2 Arial, system-ui, sans-serif;
+        color: var(--spinach);
+        text-align: right;
+      }
+
+      .crew-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 22px;
+      }
+
+      .card {
+        position: relative;
+        overflow: hidden;
+        border: 5px solid var(--ink);
+        background: var(--white);
+        box-shadow: 8px 8px 0 var(--ink);
+      }
+
+      .card:nth-child(2n) {
+        transform: rotate(1deg);
+      }
+
+      .card:nth-child(2n + 1) {
+        transform: rotate(-1deg);
+      }
+
+      .portrait {
+        aspect-ratio: 1 / 1;
+        border-bottom: 5px solid var(--ink);
+        background: var(--paper-dark);
+      }
+
+      .portrait img {
+        image-rendering: auto;
+      }
+
+      .card-body {
+        min-height: 150px;
+        padding: 18px;
+      }
+
+      h3 {
+        font: clamp(24px, 3vw, 36px) / 0.9 Luckiest, Impact, sans-serif;
+        color: var(--red);
+        text-shadow: 2px 2px 0 var(--gold);
+        text-transform: uppercase;
+      }
+
+      .tag {
+        display: inline-block;
+        margin-top: 12px;
+        border: 3px solid var(--ink);
+        background: var(--navy);
+        color: var(--white);
+        padding: 7px 10px 6px;
+        font-size: 12px;
+        text-transform: uppercase;
+      }
+
+      .gallery {
+        background:
+          linear-gradient(135deg, rgba(217, 72, 49, 0.12) 25%, transparent 25%) 0 0 / 32px 32px,
+          var(--paper-dark);
+        border-top: 5px solid var(--ink);
+        border-bottom: 5px solid var(--ink);
+      }
+
+      .photo-grid {
+        display: grid;
+        grid-template-columns: 1.2fr 0.8fr 0.8fr;
+        grid-auto-rows: 260px;
+        gap: 18px;
+      }
+
+      .snap {
+        overflow: hidden;
+        border: 5px solid var(--ink);
+        background: var(--white);
+        box-shadow: 7px 7px 0 var(--ink);
+      }
+
+      .snap:first-child {
+        grid-row: span 2;
+      }
+
+      .snap:nth-child(3),
+      .snap:nth-child(6) {
+        transform: rotate(1.2deg);
+      }
+
+      .snap:nth-child(2),
+      .snap:nth-child(5) {
+        transform: rotate(-1.2deg);
+      }
+
+      .origin-grid {
+        display: grid;
+        grid-template-columns: 0.82fr 1.18fr;
+        gap: 28px;
+        align-items: stretch;
+      }
+
+      .poster {
+        display: grid;
+        min-height: 360px;
+        place-items: center;
+        border: 6px solid var(--ink);
+        background:
+          radial-gradient(circle at 50% 44%, var(--gold) 0 18%, transparent 19%),
+          repeating-linear-gradient(90deg, var(--navy) 0 18px, var(--sea) 18px 36px);
+        box-shadow: 10px 10px 0 var(--ink);
+        color: var(--white);
+        text-align: center;
+      }
+
+      .poster strong {
+        font: clamp(58px, 9vw, 106px) / 0.75 Luckiest, Impact, sans-serif;
+        text-shadow: 5px 5px 0 var(--ink);
+      }
+
+      .manifesto {
+        border: 5px solid var(--ink);
+        background: var(--white);
+        box-shadow: 8px 8px 0 var(--ink);
+        padding: clamp(24px, 5vw, 46px);
+      }
+
+      .manifesto p {
+        font: 900 clamp(22px, 3.4vw, 40px) / 1.05 Arial, system-ui, sans-serif;
+        color: var(--navy);
+      }
+
+      .manifesto .small {
+        margin-top: 22px;
+        font-size: clamp(16px, 2vw, 22px);
+        line-height: 1.25;
+        color: var(--ink);
+      }
+
+      .ticker {
+        overflow: hidden;
+        border-top: 5px solid var(--ink);
+        border-bottom: 5px solid var(--ink);
+        background: var(--red);
+        color: var(--white);
+      }
+
+      .ticker-track {
+        display: flex;
+        width: max-content;
+        animation: roll 22s linear infinite;
+      }
+
+      .ticker span {
+        padding: 15px 18px 13px;
+        font: 24px/1 Luckiest, Impact, sans-serif;
+        text-transform: uppercase;
+        white-space: nowrap;
+      }
+
+      footer {
+        padding: 34px 0 42px;
+        background: var(--navy);
+        color: var(--white);
+        border-top: 5px solid var(--ink);
+      }
+
+      .footer-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 18px;
+        flex-wrap: wrap;
+      }
+
+      .footer-inner strong {
+        font: 36px/0.9 Luckiest, Impact, sans-serif;
+        color: var(--gold);
+        text-shadow: 3px 3px 0 var(--ink);
+      }
+
+      .footer-inner span {
+        font-size: 14px;
+        text-transform: uppercase;
+      }
+
+      @keyframes roll {
+        from {
+          transform: translateX(0);
+        }
+
+        to {
+          transform: translateX(-50%);
+        }
+      }
+
+      @media (max-width: 880px) {
+        .topbar-inner {
+          align-items: flex-start;
+          flex-direction: column;
+          padding: 14px 0;
+        }
+
+        .hero-grid,
+        .origin-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .hero-grid {
+          min-height: auto;
+          padding-top: 36px;
+        }
+
+        .hero-photo {
+          aspect-ratio: 5 / 4;
+        }
+
+        .crew-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .photo-grid {
+          grid-template-columns: 1fr 1fr;
+          grid-auto-rows: 220px;
+        }
+
+        .section-head {
+          align-items: flex-start;
+          flex-direction: column;
+        }
+
+        .section-note {
+          text-align: left;
+        }
+      }
+
+      @media (max-width: 560px) {
+        .shell {
+          width: min(100% - 22px, 1180px);
+        }
+
+        .brand-name {
+          font-size: 38px;
+        }
+
+        .brand-mark {
+          width: 42px;
+          height: 42px;
+        }
+        .brand-mark svg {
+          width: 24px;
+          height: 24px;
+        }
+
+        .nav {
+          width: 100%;
+          justify-content: flex-start;
+        }
+
+        .nav a {
+          flex: 1 1 auto;
+          min-width: 92px;
+          text-align: center;
+        }
+
+        h1 {
+          font-size: clamp(64px, 25vw, 116px);
+        }
+
+        .deck {
+          font-size: 20px;
+        }
+
+        .hero-photo {
+          border-width: 5px;
+          box-shadow: 8px 8px 0 var(--ink);
+        }
+
+        .photo-caption {
+          right: 8px;
+          bottom: -14px;
+          max-width: calc(100% - 16px);
+          font-size: 13px;
+        }
+
+        section {
+          padding: 54px 0;
+        }
+
+        .crew-grid,
+        .photo-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .photo-grid {
+          grid-auto-rows: 260px;
+        }
+
+        .snap:first-child {
+          grid-row: span 1;
+        }
+
+        .card {
+          transform: none !important;
+        }
+      }
+      /* ============================================ */
+      /* MAGAZINE COVER + 3D FLIP                    */
+      /* ============================================ */
+      .magazine {
+        perspective: 1800px;
+        perspective-origin: left center;
+      }
+
+      .cover-page {
+        position: fixed;
+        inset: 0;
+        z-index: 200;
+        transform-origin: left center;
+        transition: transform 1.3s cubic-bezier(0.35, 0, 0.1, 1);
+        backface-visibility: hidden;
+        -webkit-backface-visibility: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        user-select: none;
+        -webkit-user-select: none;
+      }
+
+      .cover-page.open {
+        transform: rotateY(-135deg);
+        pointer-events: none;
+        cursor: default;
+      }
+
+      .cover-page .cover-surface {
+        position: absolute;
+        inset: 12px;
+        border: 5px solid var(--ink);
+        background:
+          radial-gradient(circle, rgba(21,18,13,0.03) 1px, transparent 1px),
+          var(--paper);
+        background-size: 16px 16px;
+        box-shadow:
+          inset 0 0 0 8px var(--paper),
+          inset 0 0 0 11px var(--ink),
+          0 0 0 12px var(--paper),
+          0 0 0 15px var(--ink);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: clamp(16px, 3vh, 32px);
+        padding: clamp(28px, 5vw, 64px);
+        overflow: hidden;
+      }
+
+      .cover-issue {
+        font: 900 clamp(11px, 1.5vw, 14px)/1 "Arial Black", Impact, sans-serif;
+        letter-spacing: 0.35em;
+        text-transform: uppercase;
+        color: var(--navy);
+        text-align: center;
+      }
+
+      .cover-masthead {
+        font: clamp(64px, 12vw, 160px)/0.85 Luckiest, Impact, sans-serif;
+        color: var(--navy);
+        text-shadow:
+          5px 5px 0 var(--red),
+          10px 10px 0 rgba(21,18,13,0.12);
+        text-align: center;
+        letter-spacing: 0.02em;
+      }
+
+      .cover-line {
+        font: 900 clamp(16px, 2.2vw, 26px)/1.1 "Arial Black", Impact, sans-serif;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--ink);
+        padding: clamp(8px, 1.2vw, 14px) clamp(16px, 2.5vw, 28px);
+        border: 3px solid var(--ink);
+        background: var(--gold);
+        box-shadow: 5px 5px 0 var(--ink);
+        transform: rotate(-1.5deg);
+      }
+
+      .cover-sub {
+        font: 900 clamp(11px, 1.3vw, 14px)/1.2 "Arial Black", Impact, sans-serif;
+        letter-spacing: 0.08em;
+        color: rgba(21,18,13,0.45);
+        text-align: center;
+        max-width: 24em;
+      }
+
+      .cover-divider {
+        width: min(200px, 28vw);
+        height: 5px;
+        background: var(--ink);
+        border: none;
+        margin: 0;
+      }
+
+      .cover-open-hint {
+        position: absolute;
+        bottom: clamp(24px, 4vw, 48px);
+        left: 50%;
+        transform: translateX(-50%);
+        font: 900 clamp(11px, 1.4vw, 14px)/1 "Arial Black", Impact, sans-serif;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--red);
+        animation: hint-bounce 1.6s ease-in-out infinite;
+      }
+
+      @keyframes hint-bounce {
+        0%, 100% { transform: translateX(-50%) translateY(0); }
+        50% { transform: translateX(-50%) translateY(6px); }
+      }
+
+      .cover-corner {
+        position: absolute;
+        bottom: clamp(20px, 3vw, 36px);
+        left: clamp(20px, 3vw, 36px);
+        font: 900 clamp(10px, 1.2vw, 12px)/1.2 "Arial Black", Impact, sans-serif;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--ink);
+        text-align: left;
+      }
+
+      /* shadows behind flipping cover */
+      .cover-page::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to right,
+          transparent 0%,
+          rgba(0,0,0,0.06) 40%,
+          rgba(0,0,0,0.15) 100%);
+        pointer-events: none;
+        z-index: -1;
+        transition: opacity 0.3s;
+      }
+      .cover-page.open::after {
+        opacity: 0;
+      }
+    </style>
   </head>
   <body>
+    <div class="magazine">
+      <div class="cover-page" id="coverPage" title="Click to open">
+        <div class="cover-surface">
+          <div class="cover-issue">MAGAZINE</div>
+          <div class="cover-masthead">BONE</div>
+          <hr class="cover-divider">
+          <span class="cover-line">Meet the Six</span>
+          <div class="cover-sub">A Periodical of Questionable Decisions</div>
+
+          <div class="cover-corner">EST. 2017</div>
+          <div class="cover-open-hint">▼ CLICK TO OPEN</div>
+        </div>
+      </div>
+      <div class="content-page">
+    <header class="topbar">
+      <div class="shell topbar-inner">
+        <a class="brand" href="#top" aria-label="BONE home">
+          <span class="brand-mark"><svg viewBox="0 0 48 24" fill="none"><ellipse cx="10" cy="12" rx="9" ry="10" fill="#15120d"/><ellipse cx="38" cy="12" rx="9" ry="10" fill="#15120d"/><rect x="10" y="6" width="28" height="12" rx="4" fill="#15120d"/></svg></span>
+          <span class="brand-name">BONE</span>
+        </a>
+        <nav class="nav" aria-label="Main navigation">
+          <a href="#crew">Crew</a>
+          <a href="#gallery">Gallery</a>
+          <a href="#origin">Origin</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="top">
+      <section class="hero">
+        <div class="shell hero-grid">
+          <div class="hero-copy">
+            <span class="eyebrow">Private crew log</span>
+            <h1>BONE CREW</h1>
+            <p class="deck">Six people, one group chat, and enough bad decisions since high school to fill a fucking newspaper.</p>
+            <div class="hero-actions">
+              <a class="button" href="#crew">Meet the suspects</a>
+              <a class="button secondary" href="#gallery">Open the archive</a>
+            </div>
+          </div>
+          <div class="hero-photo-wrap">
+            <div class="hero-photo">
+              <img src="team-1.jpg" alt="BONE crew together by the coast">
+            </div>
+            <div class="photo-caption">Evidence from the shore</div>
+          </div>
+        </div>
+        <div class="waves" aria-hidden="true"></div>
+      </section>
+
+      <section id="crew" class="shell">
+        <div class="section-head">
+          <h2>The Six</h2>
+          <p class="section-note">We met in high school. Nobody remembers exactly how. Somehow, years later, we are still here—older, louder, and only slightly better supervised.</p>
+        </div>
+        <p style="font:900 18px/1.2 Arial,system-ui,sans-serif;color:var(--navy);margin-bottom:22px">Six people with different jobs, different problems, and the same completely unnecessary group chat.</p>
+        <div class="crew-grid">
+          <article class="card">
+            <div class="portrait"><img src="crew/Mneur%20Chan.jpg" alt="Mneur Chan"></div>
+            <div class="card-body">
+              <h3>Mneur Chan</h3>            </div>
+          </article>
+          <article class="card">
+            <div class="portrait"><img src="crew/bone%20沈柴.png" alt="Bone Shen"></div>
+            <div class="card-body">
+              <h3>Bone Shen</h3>            </div>
+          </article>
+          <article class="card">
+            <div class="portrait"><img src="crew/insane%20Cheung.png" alt="Insane Cheung"></div>
+            <div class="card-body">
+              <h3>Insane Cheung</h3>
+            </div>
+          </article>
+          <article class="card">
+            <div class="portrait"><img src="crew/ass%20裴.jpg" alt="Ass Pei"></div>
+            <div class="card-body">
+              <h3>Ass Pei</h3>
+            </div>
+          </article>
+          <article class="card">
+            <div class="portrait"><img src="crew/poison%20gen.png" alt="Poison Gen"></div>
+            <div class="card-body">
+              <h3>Poison Gen</h3>
+            </div>
+          </article>
+          <article class="card">
+            <div class="portrait"><img src="crew/liar%20鸿.png" alt="Liar Hong"></div>
+            <div class="card-body">
+              <h3>Liar Hong</h3>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <div class="ticker" aria-hidden="true">
+        <div class="ticker-track">
+          <span>No normal photos</span><span>Bone at sea</span><span>Coastal evidence</span><span>Questionable formations</span>
+          <span>No normal photos</span><span>Bone at sea</span><span>Coastal evidence</span><span>Questionable formations</span>
+        </div>
+      </div>
+
+      <section id="gallery" class="gallery">
+        <div class="shell">
+          <div class="section-head">
+            <h2>The Seaside Issue</h2>
+            <p class="section-note">We went to the coast for one decent group photo. We came back with wet shoes, fake album covers, and enough evidence to embarrass all six of us.</p>
+          </div>
+          <div class="photo-grid">
+            <figure class="snap"><img src="team-f.jpg" alt="BONE group photo"></figure>
+            <figure class="snap"><img src="team-3.jpg" alt="BONE group photo"></figure>
+            <figure class="snap"><img src="team-4.jpg" alt="BONE group photo"></figure>
+            <figure class="snap"><img src="team-5.jpg" alt="BONE group photo"></figure>
+            <figure class="snap"><img src="team-6.jpg" alt="BONE group photo"></figure>
+            <figure class="snap"><img src="team-1.jpg" alt="BONE group photo"></figure>
+          </div>
+        </div>
+      </section>
+
+      <section id="origin" class="shell">
+        <div class="origin-grid">
+          <div class="poster" aria-label="BONE poster mark">
+            <strong>BONE<br>CREW</strong>
+          </div>
+          <div class="manifesto">
+            <p>Six friends standing near the ocean and behaving like we had been hired to protect it.</p>
+            <p class="small">Nobody drowned. Nobody behaved. The camera fucking survived.</p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="shell footer-inner">
+        <strong>BONE</strong>
+        <span>Built by the crew. Approved by absolutely nobody.</span>
+      </div>
+    </footer>
+      </div><!-- .content-page -->
+    </div><!-- .magazine -->
+
     <script>
-      window.location.replace("./");
+      (function() {
+        var cover = document.getElementById('coverPage');
+        if (!cover) return;
+        cover.addEventListener('click', function() {
+          cover.classList.add('open');
+        });
+      })();
     </script>
-    <a href="./">Open BONE Collective</a>
   </body>
 </html>
