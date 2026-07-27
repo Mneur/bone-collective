@@ -593,15 +593,23 @@
       /* ============================================ */
       /* MAGAZINE COVER + 3D FLIP                    */
       /* ============================================ */
-      .magazine {
-        perspective: 1800px;
-        perspective-origin: left center;
-      }
 
       .cover-page {
         position: fixed;
         inset: 0;
         z-index: 200;
+        pointer-events: none;
+      }
+
+      .cover-page:not(.open) {
+        pointer-events: auto;
+      }
+
+      .cover-stage {
+        position: absolute;
+        inset: 0;
+        perspective: 1800px;
+        perspective-origin: left center;
         transform-origin: left center;
         transition: transform 1.3s cubic-bezier(0.35, 0, 0.1, 1);
         backface-visibility: hidden;
@@ -609,18 +617,13 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        cursor: pointer;
-        user-select: none;
-        -webkit-user-select: none;
       }
 
-      .cover-page.open {
+      .cover-page.open .cover-stage {
         transform: rotateY(-135deg);
-        pointer-events: none;
-        cursor: default;
       }
 
-      .cover-page .cover-surface {
+      .cover-surface {
         position: absolute;
         inset: 12px;
         border: 5px solid var(--ink);
@@ -717,7 +720,7 @@
       }
 
       /* shadows behind flipping cover */
-      .cover-page::after {
+      .cover-stage::after {
         content: "";
         position: absolute;
         inset: 0;
@@ -729,23 +732,25 @@
         z-index: -1;
         transition: opacity 0.3s;
       }
-      .cover-page.open::after {
+      .cover-page.open .cover-stage::after {
         opacity: 0;
       }
     </style>
   </head>
   <body>
     <div class="magazine">
-      <div class="cover-page" id="coverPage" title="Click to open">
-        <div class="cover-surface">
-          <div class="cover-issue">MAGAZINE</div>
-          <div class="cover-masthead">BONE</div>
-          <hr class="cover-divider">
-          <span class="cover-line">Meet the Six</span>
-          <div class="cover-sub">A Periodical of Questionable Decisions</div>
+      <div class="cover-page" id="coverPage">
+        <div class="cover-stage">
+          <div class="cover-surface">
+            <div class="cover-issue">MAGAZINE</div>
+            <div class="cover-masthead">BONE</div>
+            <hr class="cover-divider">
+            <span class="cover-line">Meet the Six</span>
+            <div class="cover-sub">A Periodical of Questionable Decisions</div>
 
-          <div class="cover-corner">EST. 2017</div>
-          <div class="cover-open-hint">▼ CLICK TO OPEN</div>
+            <div class="cover-corner">EST. 2017</div>
+            <div class="cover-open-hint">▼ TAP TO OPEN</div>
+          </div>
         </div>
       </div>
       <div class="content-page">
@@ -843,12 +848,12 @@
             <p class="section-note">We went to the coast for one decent group photo. We came back with wet shoes, fake album covers, and enough evidence to embarrass all six of us.</p>
           </div>
           <div class="photo-grid">
-            <figure class="snap"><img src="team-f.jpg" alt="BONE group photo"></figure>
-            <figure class="snap"><img src="team-3.jpg" alt="BONE group photo"></figure>
-            <figure class="snap"><img src="team-4.jpg" alt="BONE group photo"></figure>
-            <figure class="snap"><img src="team-5.jpg" alt="BONE group photo"></figure>
-            <figure class="snap"><img src="team-6.jpg" alt="BONE group photo"></figure>
-            <figure class="snap"><img src="team-1.jpg" alt="BONE group photo"></figure>
+            <figure class="snap"><img src="team-f.jpg" alt="BONE group photo" loading="lazy"></figure>
+            <figure class="snap"><img loading="lazy" src="team-3.jpg" alt="BONE group photo"></figure>
+            <figure class="snap"><img loading="lazy" src="team-4.jpg" alt="BONE group photo"></figure>
+            <figure class="snap"><img loading="lazy" src="team-5.jpg" alt="BONE group photo"></figure>
+            <figure class="snap"><img loading="lazy" src="team-6.jpg" alt="BONE group photo"></figure>
+            <figure class="snap"><img loading="lazy" src="team-1.jpg" alt="BONE group photo"></figure>
           </div>
         </div>
       </section>
